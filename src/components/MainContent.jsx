@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import SignupForm from './SignupForm'
 
 const MainContent = () => {
   const photoCardRef = useRef(null)
   const signupRef = useRef(null)
+  const serviceCardsRef = useRef(null)
   const [expandedService, setExpandedService] = useState(null)
 
   const toggleService = (serviceNumber) => {
@@ -12,37 +13,18 @@ const MainContent = () => {
 
   return (
     <div className="main-content">
-      <div className="services-section">
-        <div className="coming-soon-card">
-          <h2 className="coming-soon-title">Coming Soon</h2>
-          <p className="coming-soon-subtitle">TechNomad is almost live.</p>
-          <p className="coming-soon-description">
-            Digital operations, brand clarity, and web systems for founders who want things to work and look right.
-          </p>
-          <p className="coming-soon-tagline">Less friction. More momentum.</p>
-        </div>
-      </div>
-      
-      <div className="photo-card-container" ref={photoCardRef}>
-        <img
-          className="about-portrait"
-          src="/thomas_frame_trans.svg"
-          alt="TechNomad founder portrait"
-        />
-        <p className="photo-description">
-          Digital operations, creative production, systems architecture and conscious workflow design. Everything built to support founders, creatives, and teams with clarity and intention.
-        </p>
-      </div>
-      
       <div className="content-wrapper">
         <section className="section-card transparent-spacer-card"></section>
         <section className="section-card text-card">
-          <div className="block">
-            I grew up inside human stories — connection, culture, emotion.
-            Where others saw chaos, I saw patterns. Dyslexia wasn't a weakness;
-            it was a lens. TechNomad is the evolution of that lens — helping you
-            transform overwhelm into clarity, and scattered threads into systems
-            that breathe.
+          <div className="photo-card-container" ref={photoCardRef}>
+            <img
+              className="about-portrait"
+              src="/thomas_frame_trans.svg"
+              alt="TechNomad founder portrait"
+            />
+            <p className="photo-description">
+              Digital operations, creative production, systems architecture and conscious workflow design. Everything built to support founders, creatives, and teams with clarity and intention.
+            </p>
           </div>
           <div ref={signupRef}>
             <SignupForm />
@@ -50,7 +32,7 @@ const MainContent = () => {
         </section>
       </div>
 
-      <div className="service-cards-container">
+      <div className="service-cards-container" ref={serviceCardsRef}>
         <div 
           className={`service-card ${expandedService === 1 ? 'expanded' : ''}`}
           onClick={() => toggleService(1)}
@@ -120,6 +102,16 @@ const MainContent = () => {
             </ul>
             <p className="service-footer">One point of contact. No duct tape. No mystery systems.</p>
           </div>
+        </div>
+      </div>
+      
+      <div className="text-above-footer">
+        <div className="block">
+          I grew up inside human stories — connection, culture, emotion.
+          Where others saw chaos, I saw patterns. Dyslexia wasn't a weakness;
+          it was a lens. TechNomad is the evolution of that lens — helping you
+          transform overwhelm into clarity, and scattered threads into systems
+          that breathe.
         </div>
       </div>
     </div>
