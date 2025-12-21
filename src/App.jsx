@@ -1,40 +1,53 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useState } from 'react'
 import Intro from './components/Intro'
 import NeuralBackground from './components/NeuralBackground'
 import BackgroundEffects from './components/BackgroundEffects'
 import Header from './components/Header'
 import MainContent from './components/MainContent'
 import Footer from './components/Footer'
+import LoadingSequence from './components/LoadingSequence'
 
 function App() {
   const headerRef = useRef(null)
+  const [isLoading, setIsLoading] = useState(true)
 
-  // #region agent log
-  useEffect(() => {
-    fetch('http://127.0.0.1:7242/ingest/6c80f646-9618-4d24-abca-7dcf96a0529d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:12',message:'App mounted, headerRef created',data:{headerRefExists:!!headerRef.current},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-  }, []);
-  // #endregion
-
-  // #region agent log
-  useEffect(() => {
-    const checkRef = () => {
-      fetch('http://127.0.0.1:7242/ingest/6c80f646-9618-4d24-abca-7dcf96a0529d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:18',message:'Header ref check after render',data:{headerRefExists:!!headerRef.current,hasImg:!!headerRef.current?.querySelector('img')},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-    };
-    setTimeout(checkRef, 100);
-    setTimeout(checkRef, 500);
-    setTimeout(checkRef, 1000);
-  }, []);
-  // #endregion
+  const handleLoadingComplete = () => {
+    setIsLoading(false)
+  }
 
   return (
     <>
-      <Intro headerRef={headerRef} />
-      <BackgroundEffects />
-      <NeuralBackground />
-      <div id="bgHeaderLogo"></div>
-      <Header ref={headerRef} />
-      <MainContent />
-      <Footer />
+      <LoadingSequence onComplete={handleLoadingComplete} />
+      {!isLoading && (
+        <>
+          <Intro headerRef={headerRef} />
+          <BackgroundEffects />
+          <NeuralBackground />
+          <div id="bgHeaderLogo"></div>
+          <Header ref={headerRef} />
+        </>
+      )}
+      {!isLoading && (
+        <>
+          <div className="coming-soon-card">
+            <h2 className="coming-soon-title">Coming Soon</h2>
+            <p className="coming-soon-subtitle">TechNomad is almost live.</p>
+            <p className="coming-soon-description">
+              Digital operations, brand clarity, and web systems for founders who want things to work and look right.
+            </p>
+            <p className="coming-soon-tagline">Less friction. More momentum.</p>
+            <div className="coming-soon-status">
+              <p className="status-item open-now">Brand & Web Projects: <span className="open-now-text">Open Now</span></p>
+              <p className="status-item">VA Support: Opening Mid-January</p>
+            </div>
+            <a href="https://forms.google.com/YOUR_FORM_ID_HERE" target="_blank" rel="noopener noreferrer" className="coming-soon-button">
+              Apply for Founding Access
+            </a>
+          </div>
+          <MainContent />
+          <Footer />
+        </>
+      )}
     </>
   )
 }
