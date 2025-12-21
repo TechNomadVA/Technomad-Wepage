@@ -344,10 +344,10 @@ canvas#helix {
   text-align: center;
   color: #E6F4FF;
   padding-bottom: 100px;
-  width: calc(100% * 8 / 12);
-  max-width: calc(100% * 8 / 12);
-  margin-left: calc(100% * 2 / 12);
-  margin-right: calc(100% * 2 / 12);
+  width: 66.67%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Services Section */
@@ -601,8 +601,10 @@ canvas#helix {
 .photo-card-container {
   position: fixed;
   top: 15vh;
-  left: calc(50% - (100% * 4 / 12));
-  width: calc(100% * 8 / 12);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 66.67%;
+  max-width: 1200px;
   z-index: 100;
   transition: opacity 0.3s ease;
   pointer-events: none;
@@ -652,9 +654,10 @@ canvas#helix {
 .footer {
   position: fixed;
   bottom: 0;
-  left: calc(100% * 2 / 12);
-  right: calc(100% * 2 / 12);
-  width: calc(100% * 8 / 12);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 66.67%;
+  max-width: 1200px;
   padding: 1.5rem 0;
   font-size: 0.9rem;
   color: #6F7A9A;
@@ -889,6 +892,22 @@ canvas#helix {
 
   .service-footer {
     font-size: 0.9rem;
+  }
+
+  .main-content {
+    width: 90%;
+    max-width: 100%;
+    padding: 2vh 15px;
+  }
+
+  .photo-card-container {
+    width: 90%;
+    max-width: 100%;
+  }
+
+  .footer {
+    width: 90%;
+    max-width: 100%;
   }
 
   .photo-description {
