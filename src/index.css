@@ -1,0 +1,426 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  min-height: 100vh;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #00010F; /* deep space black */
+  color: #E6F4FF;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+canvas#helix {
+  background: transparent !important;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+#bgHeaderLogo {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: clamp(300px, 60vw, 800px);
+  height: auto;
+  background: url("/header_logo.svg") center/contain no-repeat;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+/* Ambient Mandala Drift for intro */
+#mandala {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 190vmin;
+  height: 190vmin;
+  opacity: 0.8;
+  filter: blur(5px);
+  transform: translate(-50%, -50%) rotate(0deg);
+  pointer-events: none;
+  z-index: 0;
+  background: url("/tree-mandala1.png") center/contain no-repeat !important;
+}
+
+/* Color Glow Overlays - Alternating fade effect */
+.color-glow-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: screen;
+}
+
+#cyanGlow {
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 229, 255, 0.4) 0%,
+    rgba(0, 229, 255, 0.2) 40%,
+    transparent 70%
+  );
+  animation: cyanGlowPulse 4s ease-in-out infinite;
+}
+
+#magentaGlow {
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 0, 212, 0.4) 0%,
+    rgba(255, 0, 212, 0.2) 40%,
+    transparent 70%
+  );
+  animation: magentaGlowPulse 4s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+@keyframes cyanGlowPulse {
+  0%, 100% {
+    opacity: 0.3;
+    filter: blur(40px) brightness(1);
+  }
+  50% {
+    opacity: 0.8;
+    filter: blur(30px) brightness(1.5);
+  }
+}
+
+@keyframes magentaGlowPulse {
+  0%, 100% {
+    opacity: 0.3;
+    filter: blur(40px) brightness(1);
+  }
+  50% {
+    opacity: 0.8;
+    filter: blur(30px) brightness(1.5);
+  }
+}
+
+#summon,
+#treeGlow,
+#ringGlow {
+  background: url("/tree-mandala1.png") center/contain no-repeat;
+}
+
+/* Intro wrapper for summoning sequence */
+#intro {
+  position: fixed;
+  inset: 0;   
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1.8s ease;
+}
+
+#intro.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Summoning mandala layers */
+#summon {
+  position: absolute;
+  width: 190vmin;
+  height: 190vmin;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.7);
+  opacity: 0;
+  filter: blur(18px);
+  transition:
+    opacity 1.6s ease,
+    transform 2.4s ease,
+    filter 1.8s ease;
+}
+
+#treeGlow {
+  position: absolute;
+  width: 190vmin;
+  height: 190vmin;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  filter: blur(10px) brightness(2);
+  mask-image: radial-gradient(circle at center, white 30%, transparent 70%);
+  transition: opacity 1.3s ease;
+}
+
+#ringGlow {
+  position: absolute;
+  width: 190vmin;
+  height: 190vmin;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  filter: blur(14px) brightness(1.4);
+  mask-image: radial-gradient(circle at center, transparent 45%, white 75%, transparent 90%);
+  transition: opacity 1.6s ease;
+}
+
+#pulse {
+  position: absolute;
+  width: 80vmin;
+  height: 80vmin;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.2);
+  background: radial-gradient(circle, rgba(0,200,255,0.25), transparent 70%);
+  opacity: 0;
+  border-radius: 50%;
+  filter: blur(32px);
+  transition:
+    opacity 1s ease,
+    transform 1.8s ease;
+}
+
+/* FULLSCREEN LOGO */
+#introLogo {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  object-fit: contain;
+  object-position: center;
+  opacity: 0;
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 18px rgba(0, 229, 255, 0.7));
+  transition:
+    opacity 2s ease,
+    transform 2.4s ease;
+  z-index: 20;
+  animation: introLogoGlow 3.2s ease-out 1s forwards;
+}
+
+@keyframes introLogoGlow {
+  0% {
+    filter: drop-shadow(0 0 4px rgba(0, 229, 255, 0.0));
+  }
+  40% {
+    filter:
+      drop-shadow(0 0 42px rgba(0, 229, 255, 1))
+      drop-shadow(0 0 80px rgba(255, 0, 212, 0.9));
+  }
+  100% {
+    filter:
+      drop-shadow(0 0 26px rgba(0, 229, 255, 0.9))
+      drop-shadow(0 0 46px rgba(255, 0, 212, 0.7));
+  }
+}
+
+/* NEURAL BACKGROUND */
+#neural {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 5s ease;
+  z-index: -1;
+}
+
+/* Header Styles */
+.main-header {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3vh 20px 2vh;
+  width: 100%;
+}
+
+.main-header img {
+  max-width: clamp(200px, 34vw, 280px);
+  width: 100%;
+  height: auto;
+  filter:
+    drop-shadow(0 0 22px rgba(0, 229, 255, 0.7))
+    drop-shadow(0 0 44px rgba(255, 0, 212, 0.6));
+}
+
+.main-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2vh 20px;
+  text-align: center;
+  color: #E6F4FF;
+  flex: 1;
+  padding-bottom: 100px;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 3rem;
+  max-width: 1200px;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.section-card {
+  /* Card background for each main content section */
+  background:
+    radial-gradient(circle at top, rgba(0, 229, 255, 0.12), transparent 55%),
+    radial-gradient(circle at bottom, rgba(255, 0, 212, 0.10), transparent 60%),
+    linear-gradient(135deg, rgba(0, 1, 15, 0.65), rgba(0, 1, 15, 0.35));
+  padding: 2.5rem 2rem;
+  border-radius: 20px;
+  max-width: 720px;
+  flex: 1;
+  min-width: 300px;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(0, 229, 255, 0.26);
+}
+
+#about {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.block {
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: #C4E8FF;
+  max-width: 620px;
+  margin-bottom: 2rem;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+  font-size: 0.9rem;
+  color: #6F7A9A;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: center;
+  z-index: 10;
+  background: rgba(0, 1, 15, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* — Mailing List Form — */
+.signup-section {
+  margin: 0;
+  text-align: center;
+  max-width: 420px;
+  padding: 1.9rem 2.2rem;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at top, rgba(0, 229, 255, 0.25), transparent 60%),
+    radial-gradient(circle at bottom, rgba(255, 0, 212, 0.20), transparent 65%),
+    rgba(0, 1, 15, 0.78);
+  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.95);
+  border: 1px solid rgba(0, 229, 255, 0.55);
+  width: 100%;
+}
+
+.signup-title {
+  font-size: 1.35rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(45deg, #00E5FF, #FF00D4);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.signup-form input[type="email"] {
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  border: 1px solid rgba(0, 229, 255, 0.8);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 320px;
+  background-color: rgba(0, 1, 15, 0.9);
+  color: #E6F4FF;
+}
+
+.signup-form button {
+  padding: 0.85rem 1.8rem;
+  background: linear-gradient(45deg, #00E5FF, #FF00D4);
+  border: none;
+  color: white;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+}
+
+.signup-form button:hover {
+  opacity: 0.95;
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 0 28px rgba(0, 229, 255, 0.75);
+}
+
+/* Portrait Styles */
+.about-portrait {
+  /* Portrait avatar with balanced proportions and glow that follows the image outline */
+  max-width: clamp(200px, 30vw, 350px);
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  filter:
+    drop-shadow(0 0 26px rgba(0, 229, 255, 0.9))
+    drop-shadow(0 0 52px rgba(255, 0, 212, 0.7))
+    drop-shadow(0 18px 40px rgba(0, 0, 0, 0.9));
+  flex-shrink: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .content-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .about-portrait {
+    max-width: clamp(150px, 50vw, 250px);
+  }
+
+  .section-card {
+    min-width: 100%;
+  }
+}
+
