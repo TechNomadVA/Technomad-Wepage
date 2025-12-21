@@ -108,8 +108,15 @@ const Intro = ({ headerRef }) => {
     }, 5700))
 
     timers.push(setTimeout(() => {
-      introRef.current.style.opacity = "0"
-      introRef.current.style.pointerEvents = "none"
+      if (introRef.current) {
+        introRef.current.style.opacity = "0"
+        introRef.current.style.pointerEvents = "none"
+        introRef.current.classList.add("hidden")
+      }
+      if (backdropRef.current) {
+        backdropRef.current.style.pointerEvents = "none"
+        backdropRef.current.classList.add("hidden")
+      }
       // Ensure header logo is visible after intro
       const headerImg = headerRef.current?.querySelector('img')
       if (headerImg) {
