@@ -12,15 +12,33 @@ const NeuralBackground = () => {
   const animationFrameRef = useRef(null)
 
   useEffect(() => {
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/6c80f646-9618-4d24-abca-7dcf96a0529d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'NeuralBackground.jsx:15',message:'NeuralBackground useEffect started',data:{canvasRefExists:!!canvasRef.current,windowDefined:typeof window !== 'undefined',threeDefined:typeof THREE !== 'undefined'},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+    // #endregion
+
     if (!canvasRef.current || typeof window === 'undefined') {
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/6c80f646-9618-4d24-abca-7dcf96a0529d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'NeuralBackground.jsx:17',message:'ERROR: NeuralBackground early return',data:{canvasRefExists:!!canvasRef.current,windowDefined:typeof window !== 'undefined'},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+      // #endregion
       return
     }
 
     const canvas = canvasRef.current
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
+    // #region agent log
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
+    } catch (e) {
+      fetch('http://127.0.0.1:7242/ingest/6c80f646-9618-4d24-abca-7dcf96a0529d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'NeuralBackground.jsx:28',message:'ERROR: WebGLRenderer creation failed',data:{error:e.message},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+      return;
+    }
+    // #endregion
     renderer.setPixelRatio(window.devicePixelRatio)
     renderer.setSize(window.innerWidth, window.innerHeight)
     rendererRef.current = renderer
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/6c80f646-9618-4d24-abca-7dcf96a0529d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'NeuralBackground.jsx:24',message:'WebGLRenderer created successfully',data:{width:window.innerWidth,height:window.innerHeight,pixelRatio:window.devicePixelRatio},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+    // #endregion
 
     const scene = new THREE.Scene()
     sceneRef.current = scene
@@ -88,7 +106,12 @@ const NeuralBackground = () => {
     }
 
     const animateNeural = () => {
-      if (!nodesRef.current || !rendererRef.current || !cameraRef.current) return
+      if (!nodesRef.current || !rendererRef.current || !cameraRef.current) {
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/6c80f646-9618-4d24-abca-7dcf96a0529d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'NeuralBackground.jsx:91',message:'ERROR: animateNeural early return',data:{nodesExists:!!nodesRef.current,rendererExists:!!rendererRef.current,cameraExists:!!cameraRef.current},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+        // #endregion
+        return
+      }
       
       nodesRef.current.rotation.y += 0.0006
       nodesRef.current.rotation.x += 0.0002
@@ -96,6 +119,9 @@ const NeuralBackground = () => {
       rendererRef.current.render(sceneRef.current, cameraRef.current)
       animationFrameRef.current = requestAnimationFrame(animateNeural)
     }
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/6c80f646-9618-4d24-abca-7dcf96a0529d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'NeuralBackground.jsx:99',message:'Starting neural animation loop',data:{},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+    // #endregion
     animateNeural()
 
     // Fade in neural background

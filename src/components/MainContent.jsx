@@ -4,76 +4,7 @@ import SignupForm from './SignupForm'
 const MainContent = () => {
   const photoCardRef = useRef(null)
   const signupRef = useRef(null)
-  const [opacity, setOpacity] = useState(1)
   const [expandedService, setExpandedService] = useState(null)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!photoCardRef.current || !signupRef.current) return
-
-      const photoCard = photoCardRef.current
-      const signupForm = signupRef.current
-      
-      const photoRect = photoCard.getBoundingClientRect()
-      const signupRect = signupForm.getBoundingClientRect()
-      const windowHeight = window.innerHeight
-      
-      // Calculate distance between photo card and signup form
-      const distance = signupRect.top - photoRect.bottom
-      
-      // Fade in: Photo entering viewport from bottom
-      const photoTop = photoRect.top
-      const photoBottom = photoRect.bottom
-      const fadeInDistance = 400 // Start fading in when photo is 400px below viewport
-      const fadeInComplete = 100 // Fully visible when photo is 100px into viewport
-      
-      // Fade out: Start fading when signup form is within 300px of photo card
-      const fadeOutStart = 300
-      const fadeOutEnd = 0
-      
-      let newOpacity = 1
-      
-      // Check if photo is below viewport (fade in as it approaches)
-      if (photoTop > windowHeight) {
-        // Photo is below viewport - fade in as it approaches
-        if (photoTop < windowHeight + fadeInDistance) {
-          const fadeInProgress = 1 - ((photoTop - (windowHeight - fadeInComplete)) / (fadeInDistance + fadeInComplete))
-          newOpacity = Math.max(0, Math.min(1, fadeInProgress))
-        } else {
-          // Photo is too far below - invisible
-          newOpacity = 0
-        }
-      } 
-      // Check if photo is in viewport - apply fade out logic if signup form is approaching
-      else if (photoTop < windowHeight && photoBottom > 0) {
-        // Photo is in viewport
-        if (distance < fadeOutStart && distance > fadeOutEnd) {
-          // Fade out as signup form approaches
-          const fadeOutProgress = 1 - (distance / fadeOutStart)
-          newOpacity = Math.max(0, 1 - fadeOutProgress)
-        } else if (distance <= fadeOutEnd) {
-          // Fully faded when signup form reaches or passes photo
-          newOpacity = 0
-        } else {
-          // Fully visible when signup form is far away
-          newOpacity = 1
-        }
-      }
-      // Photo is above viewport - keep at full opacity (or fade based on scroll direction)
-      else {
-        newOpacity = 1
-      }
-      
-      setOpacity(newOpacity)
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    handleScroll() // Initial check
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
 
   const toggleService = (serviceNumber) => {
     setExpandedService(expandedService === serviceNumber ? null : serviceNumber)
@@ -92,7 +23,7 @@ const MainContent = () => {
         </div>
       </div>
       
-      <div className="photo-card-container" ref={photoCardRef} style={{ opacity }}>
+      <div className="photo-card-container" ref={photoCardRef}>
         <img
           className="about-portrait"
           src="/thomas_frame_trans.svg"

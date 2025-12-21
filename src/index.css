@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-html, body {
+html {
   min-height: 100vh;
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: #00010F; /* deep space black */
@@ -13,6 +13,15 @@ html, body {
   overflow-y: auto;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
+}
+
+body {
+  min-height: 100vh;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #00010F; /* deep space black */
+  color: #E6F4FF;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 #root {

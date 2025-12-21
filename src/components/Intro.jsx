@@ -5,16 +5,24 @@ const Intro = ({ headerRef }) => {
   const summonRef = useRef(null)
   const treeGlowRef = useRef(null)
   const ringGlowRef = useRef(null)
-  const pulseRef = useRef(null)
   const backdropRef = useRef(null)
 
   useEffect(() => {
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/6c80f646-9618-4d24-abca-7dcf96a0529d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Intro.jsx:12',message:'Intro useEffect started',data:{headerRefExists:!!headerRef.current,summonRefExists:!!summonRef.current,treeGlowRefExists:!!treeGlowRef.current,ringGlowRefExists:!!ringGlowRef.current},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+    // #endregion
+
     const timers = []
 
     timers.push(setTimeout(() => {
-      summonRef.current.style.opacity = "0.35"
-      summonRef.current.style.transform = "translate(-50%, -50%) scale(1)"
-      summonRef.current.style.filter = "blur(8px)"
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/6c80f646-9618-4d24-abca-7dcf96a0529d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Intro.jsx:16',message:'Timeout 200ms: setting summon opacity',data:{summonRefExists:!!summonRef.current},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+      // #endregion
+      if (summonRef.current) {
+        summonRef.current.style.opacity = "0.35"
+        summonRef.current.style.transform = "translate(-50%, -50%) scale(1)"
+        summonRef.current.style.filter = "blur(8px)"
+      }
     }, 200))
 
     timers.push(setTimeout(() => {
@@ -26,19 +34,17 @@ const Intro = ({ headerRef }) => {
     }, 1300))
 
     timers.push(setTimeout(() => {
-      pulseRef.current.style.opacity = "1"
-      pulseRef.current.style.transform = "translate(-50%, -50%) scale(1)"
-    }, 900))
-
-    timers.push(setTimeout(() => {
-      pulseRef.current.style.opacity = "0"
-    }, 1650))
-
-    timers.push(setTimeout(() => {
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/6c80f646-9618-4d24-abca-7dcf96a0529d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Intro.jsx:38',message:'Timeout 1500ms: accessing headerRef for logo',data:{headerRefExists:!!headerRef.current,headerImgExists:!!headerRef.current?.querySelector('img')},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+      // #endregion
       const headerImg = headerRef.current?.querySelector('img')
       if (headerImg) {
         headerImg.style.opacity = "1"
         headerImg.style.transform = "scale(1)"
+      } else {
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/6c80f646-9618-4d24-abca-7dcf96a0529d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Intro.jsx:43',message:'ERROR: headerImg not found at 1500ms',data:{headerRefExists:!!headerRef.current},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+        // #endregion
       }
     }, 1500))
 
@@ -50,6 +56,9 @@ const Intro = ({ headerRef }) => {
 
     // After logo sequence, animate header logo to final position and fade backdrop
     timers.push(setTimeout(() => {
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/6c80f646-9618-4d24-abca-7dcf96a0529d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Intro.jsx:53',message:'Timeout 4200ms: animating header to final position',data:{headerRefExists:!!headerRef.current,headerImgExists:!!headerRef.current?.querySelector('img'),windowWidth:window.innerWidth,windowHeight:window.innerHeight},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+      // #endregion
       if (headerRef.current) {
         const header = headerRef.current
         const headerImg = header.querySelector('img')
@@ -135,8 +144,6 @@ const Intro = ({ headerRef }) => {
       <div id="summon" ref={summonRef}></div>
       <div id="treeGlow" ref={treeGlowRef}></div>
       <div id="ringGlow" ref={ringGlowRef}></div>
-      <div id="pulse" ref={pulseRef}></div>
-
     </div>
   )
 }

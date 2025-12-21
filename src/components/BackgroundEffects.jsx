@@ -9,6 +9,10 @@ const BackgroundEffects = () => {
   const helixAnimationRef = useRef(null)
 
   useEffect(() => {
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/6c80f646-9618-4d24-abca-7dcf96a0529d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'BackgroundEffects.jsx:12',message:'BackgroundEffects useEffect started',data:{canvasRefExists:!!canvasRef.current,mandalaRefExists:!!mandalaRef.current},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
+    // #endregion
+
     // Mandala rotation animation - disabled
     // const drift = () => {
     //   if (mandalaRef.current) {
@@ -25,10 +29,16 @@ const BackgroundEffects = () => {
     const canvas = canvasRef.current
     if (canvas) {
       const ctx = canvas.getContext('2d')
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/6c80f646-9618-4d24-abca-7dcf96a0529d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'BackgroundEffects.jsx:28',message:'Canvas context obtained',data:{ctxExists:!!ctx,canvasWidth:canvas.width,canvasHeight:canvas.height},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
+      // #endregion
 
       const resizeCanvas = () => {
         canvas.width = window.innerWidth
         canvas.height = window.innerHeight
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/6c80f646-9618-4d24-abca-7dcf96a0529d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'BackgroundEffects.jsx:40',message:'Canvas resized',data:{canvasWidth:canvas.width,canvasHeight:canvas.height,windowWidth:window.innerWidth,windowHeight:window.innerHeight},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
+        // #endregion
       }
       resizeCanvas()
 
@@ -37,7 +47,12 @@ const BackgroundEffects = () => {
       const particleSize = 3.5
 
       const animateHelix = () => {
-        if (!ctx || !canvas) return
+        if (!ctx || !canvas) {
+          // #region agent log
+          fetch('http://127.0.0.1:7242/ingest/6c80f646-9618-4d24-abca-7dcf96a0529d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'BackgroundEffects.jsx:40',message:'ERROR: animateHelix early return',data:{ctxExists:!!ctx,canvasExists:!!canvas},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
+          // #endregion
+          return
+        }
         
         ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -77,12 +92,19 @@ const BackgroundEffects = () => {
         helixAngleRef.current += 0.018
         helixAnimationRef.current = requestAnimationFrame(animateHelix)
       }
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/6c80f646-9618-4d24-abca-7dcf96a0529d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'BackgroundEffects.jsx:81',message:'Starting helix animation loop',data:{},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
+      // #endregion
       animateHelix()
 
       handleResize = () => {
         resizeCanvas()
       }
       window.addEventListener('resize', handleResize)
+    } else {
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/6c80f646-9618-4d24-abca-7dcf96a0529d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'BackgroundEffects.jsx:87',message:'ERROR: Canvas not available',data:{canvasRefExists:!!canvasRef.current},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
+      // #endregion
     }
 
     // Cleanup function - always registered to prevent memory leaks
