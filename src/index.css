@@ -246,7 +246,7 @@ canvas#helix {
 }
 
 .main-header img {
-  max-width: clamp(200px, 34vw, 280px);
+  max-width: clamp(900px, 150vw, 1200px);
   width: 100%;
   height: auto;
   filter:
@@ -269,13 +269,28 @@ canvas#helix {
 
 .content-wrapper {
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
   gap: 3rem;
-  max-width: 1200px;
+  max-width: 100%;
   width: 100%;
   justify-content: center;
-  flex-wrap: wrap;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2rem;
+  flex: 1;
+  min-width: 300px;
+}
+
+.right-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0 0 auto;
 }
 
 .section-card {
@@ -286,9 +301,9 @@ canvas#helix {
     linear-gradient(135deg, rgba(0, 1, 15, 0.65), rgba(0, 1, 15, 0.35));
   padding: 2.5rem 2rem;
   border-radius: 20px;
-  max-width: 720px;
-  flex: 1;
-  min-width: 300px;
+  max-width: clamp(900px, 150vw, 1200px);
+  width: 100%;
+  margin: 0 auto;
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   box-shadow: 0 40px 120px rgba(0, 0, 0, 0.9);
@@ -300,14 +315,16 @@ canvas#helix {
   flex-direction: column;
   align-items: center;
   gap: 2rem;
+  width: 100%;
 }
 
 .block {
   font-size: 1.05rem;
   line-height: 1.9;
   color: #C4E8FF;
-  max-width: 620px;
-  margin-bottom: 2rem;
+  width: 100%;
+  margin-bottom: 0;
+  text-align: center;
 }
 
 .footer {
@@ -392,7 +409,7 @@ canvas#helix {
 
 /* Portrait Styles */
 .about-portrait {
-  /* Portrait avatar with balanced proportions and glow that follows the image outline */
+  /* Portrait avatar with balanced proportions */
   max-width: clamp(200px, 30vw, 350px);
   width: 100%;
   height: auto;
@@ -400,11 +417,14 @@ canvas#helix {
   background: transparent;
   border-radius: 0;
   box-shadow: none;
-  filter:
-    drop-shadow(0 0 26px rgba(0, 229, 255, 0.9))
-    drop-shadow(0 0 52px rgba(255, 0, 212, 0.7))
-    drop-shadow(0 18px 40px rgba(0, 0, 0, 0.9));
+  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.9));
   flex-shrink: 0;
+  display: none;
+}
+
+/* Hide signup section */
+.signup-section {
+  display: none;
 }
 
 /* Responsive Design */
@@ -415,12 +435,37 @@ canvas#helix {
     gap: 2rem;
   }
 
+  .left-column {
+    width: 100%;
+    align-items: center;
+  }
+
+  .right-column {
+    width: 100%;
+  }
+
   .about-portrait {
     max-width: clamp(150px, 50vw, 250px);
   }
 
   .section-card {
     min-width: 100%;
+  }
+
+  #about {
+    align-items: center;
+  }
+
+  .block {
+    text-align: center;
+  }
+
+  .main-header img {
+    max-width: clamp(300px, 80vw, 600px);
+  }
+
+  .section-card {
+    max-width: clamp(300px, 80vw, 600px);
   }
 }
 

@@ -70,7 +70,7 @@ const Intro = () => {
       <img
         id="introLogo"
         ref={introLogoRef}
-        src="/tech_nomad_logo.png"
+        src="/header_logo.svg"
         alt="TechNomad Shield Logo"
       />
     </div>
