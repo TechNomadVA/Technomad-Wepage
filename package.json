@@ -14,8 +14,10 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && npm run sync-assets",
     "preview": "vite preview",
-    "check-git-env": "node scripts/check-git-env.js"
+    "check-git-env": "node scripts/check-git-env.js",
+    "sync-assets": "node scripts/sync-assets.js",
+    "preview:sync": "npm run sync-assets && vite preview"
   }
 }
