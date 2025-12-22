@@ -57,7 +57,9 @@ const NeuralBackground = ({ isHovered = false, easterEggActive = false }) => {
     scene.add(nodes)
     nodesRef.current = nodes
 
-    const totalNodes = 600
+    // Reduce particle count on mobile devices for better performance
+    const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    const totalNodes = isMobile ? 300 : 600 // Half particles on mobile
     const baseSize = 0.045
     const maxSize = 0.08 // Approximately 5px bigger at typical screen sizes
     

@@ -51,18 +51,22 @@ const PortalRim = ({ isEasterEggActive = false }) => {
     }
   }, [isEasterEggActive])
 
+  // Mobile detection for responsive scaling
+  const isMobile = typeof window !== 'undefined' && (window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+  const scale = isMobile ? 1.5 : 2 // Smaller scale on mobile
+
   return (
     <div
       style={{
         position: 'fixed',
         top: '50%',
         left: '50%',
-        transform: 'translate(-50%, -50%) scale(2)',
+        transform: `translate(-50%, -50%) scale(${scale})`,
         transformOrigin: 'center center',
         width: 'min(80vw, 80vh)',
         height: 'min(80vw, 80vh)',
-        maxWidth: '800px',
-        maxHeight: '800px',
+        maxWidth: isMobile ? '90vw' : '800px',
+        maxHeight: isMobile ? '90vh' : '800px',
           opacity: isEasterEggActive ? 1 : 0,
           transition: 'opacity 1s ease',
         pointerEvents: 'none',

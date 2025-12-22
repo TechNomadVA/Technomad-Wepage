@@ -72,6 +72,8 @@ function App() {
               className="coming-soon-button"
               onMouseEnter={() => setIsButtonHovered(true)}
               onMouseLeave={() => setIsButtonHovered(false)}
+              onTouchStart={() => setIsButtonHovered(true)}
+              onTouchEnd={() => setIsButtonHovered(false)}
             >
               Apply for Founding Access
             </a>

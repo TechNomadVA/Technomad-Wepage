@@ -26,9 +26,11 @@ const HelixBackground = ({ isEasterEggActive = false }) => {
     lastWaveTimeRef.current = Date.now()
     timeRef.current = 0
 
-    const numPoints = 90
+    // Reduce complexity on mobile devices for better performance
+    const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    const numPoints = isMobile ? 60 : 90 // Fewer points on mobile
     const amplitude = 110
-    const particleSize = 3.5
+    const particleSize = isMobile ? 3 : 3.5 // Slightly smaller particles on mobile
 
     // Wave system for sound wave-like pulses
     const createWave = () => {

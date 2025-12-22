@@ -625,6 +625,23 @@ canvas#neural {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   box-shadow: 0 4px 15px rgba(0, 229, 255, 0.4);
+  overflow: hidden; /* For ripple effect */
+}
+
+/* Touch pulse animation */
+@keyframes buttonPulse {
+  0% {
+    box-shadow: 0 4px 15px rgba(0, 229, 255, 0.4),
+                0 0 0 0 rgba(0, 229, 255, 0.7);
+  }
+  50% {
+    box-shadow: 0 4px 15px rgba(0, 229, 255, 0.4),
+                0 0 0 10px rgba(0, 229, 255, 0);
+  }
+  100% {
+    box-shadow: 0 4px 15px rgba(0, 229, 255, 0.4),
+                0 0 0 0 rgba(0, 229, 255, 0);
+  }
 }
 
 .coming-soon-button:hover {
@@ -634,7 +651,8 @@ canvas#neural {
 }
 
 .coming-soon-button:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 10px rgba(0, 229, 255, 0.5);
 }
 
 /* Service Cards Container */
@@ -1152,5 +1170,361 @@ canvas#neural {
   .photo-description {
     font-size: 0.9rem;
     padding: 0 15px;
+  }
+}
+
+/* Enhanced Mobile Responsive Design */
+@media (max-width: 768px) {
+  /* Header - Mobile Optimized */
+  .main-header {
+    padding: 1rem 0;
+  }
+
+  .main-header img {
+    max-width: clamp(180px, 50vw, 280px);
+    padding: 0 1rem;
+  }
+
+  /* Background Logo - Smaller on Mobile */
+  #bgHeaderLogo {
+    width: clamp(200px, 70vw, 400px);
+    opacity: 0.2;
+  }
+
+  /* Mandala - Smaller and Less Blur for Performance */
+  #mandala {
+    width: 150vmin;
+    height: 150vmin;
+    filter: blur(3px);
+    opacity: 0.6;
+  }
+
+  /* Color Glows - Reduced Intensity on Mobile */
+  .color-glow-overlay {
+    opacity: 0.5;
+  }
+
+  /* Coming Soon Card - Mobile Optimized */
+  .coming-soon-card {
+    padding: 2rem 1.5rem;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .coming-soon-title {
+    font-size: clamp(1.4rem, 6vw, 1.8rem);
+    margin: 1rem 0;
+  }
+
+  .coming-soon-subtitle {
+    font-size: clamp(1rem, 4vw, 1.3rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .coming-soon-description {
+    font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .coming-soon-tagline {
+    font-size: clamp(1rem, 4vw, 1.2rem);
+    margin: 1rem 0;
+  }
+
+  .coming-soon-button {
+    font-size: clamp(0.9rem, 3.5vw, 1rem);
+    padding: 1rem 2rem;
+    min-height: 48px; /* Better touch target */
+  }
+
+  .coming-soon-status {
+    font-size: clamp(0.85rem, 3vw, 1rem);
+    margin: 1.5rem 0;
+  }
+
+  /* Service Cards - Mobile Stack */
+  .service-cards-container {
+    padding: 0 1rem;
+    gap: 1.5rem;
+  }
+
+  .service-card {
+    padding: 1.5rem 1.2rem;
+    border-radius: 16px;
+    min-height: auto;
+  }
+
+  .service-card-header {
+    margin-bottom: 1rem;
+  }
+
+  .service-number {
+    font-size: clamp(1.2rem, 5vw, 1.6rem);
+  }
+
+  .service-title {
+    font-size: clamp(1.2rem, 5vw, 1.6rem);
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
+  }
+
+  .service-tagline {
+    font-size: clamp(0.95rem, 4vw, 1.1rem);
+    margin-bottom: 0.75rem;
+  }
+
+  .service-description {
+    font-size: clamp(0.9rem, 3.5vw, 1rem);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .service-features {
+    font-size: clamp(0.85rem, 3.5vw, 0.95rem);
+    line-height: 1.7;
+    padding-left: 1.2rem;
+  }
+
+  .service-features li {
+    margin-bottom: 0.5rem;
+  }
+
+  .service-footer {
+    font-size: clamp(0.85rem, 3.5vw, 0.95rem);
+    margin-top: 1rem;
+  }
+
+  /* Main Content - Mobile Layout */
+  .main-content {
+    padding: 1rem 0 3rem;
+  }
+
+  .content-wrapper {
+    padding: 0 1rem;
+    gap: 2rem;
+  }
+
+  .section-card {
+    padding: 1.5rem 1.2rem;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .photo-card-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .about-portrait {
+    max-width: clamp(120px, 40vw, 200px);
+    width: 100%;
+    height: auto;
+  }
+
+  .photo-description {
+    font-size: clamp(0.9rem, 3.5vw, 1rem);
+    line-height: 1.7;
+    text-align: center;
+    padding: 0 1rem;
+    max-width: 100%;
+  }
+
+  /* Signup Form - Mobile */
+  .signup-section {
+    width: 100%;
+    padding: 0;
+  }
+
+  .signup-form {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .signup-form input {
+    font-size: 1rem; /* Prevents zoom on iOS */
+    padding: 1rem;
+    min-height: 48px;
+  }
+
+  .signup-form button {
+    font-size: 1rem;
+    padding: 1rem 2rem;
+    min-height: 48px;
+  }
+
+  /* Text Above Footer */
+  .text-above-footer {
+    padding: 2rem 1.5rem;
+  }
+
+  .text-above-footer .block {
+    font-size: clamp(0.95rem, 3.5vw, 1.1rem);
+    line-height: 1.8;
+    text-align: center;
+  }
+
+  /* Footer - Mobile */
+  .footer {
+    padding: 2rem 1.5rem;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Portal Rim - Mobile Optimized */
+  .portal-rim-container {
+    transform: scale(0.8);
+  }
+
+  .portal-rim-image {
+    max-width: 90vw;
+    max-height: 90vh;
+  }
+
+  .portal-open-vivid {
+    max-width: 60vw;
+    max-height: 60vh;
+  }
+
+  .hero-logo-container {
+    max-width: 70vw;
+    max-height: 70vh;
+  }
+
+  .hero-logo-image {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+/* Small Mobile Devices (phones in portrait) */
+@media (max-width: 480px) {
+  .main-header {
+    padding: 0.75rem 0;
+  }
+
+  .main-header img {
+    max-width: clamp(150px, 60vw, 220px);
+  }
+
+  .coming-soon-card {
+    padding: 1.5rem 1rem;
+  }
+
+  .service-card {
+    padding: 1.2rem 1rem;
+  }
+
+  .section-card {
+    padding: 1.2rem 1rem;
+  }
+
+  .content-wrapper {
+    padding: 0 0.75rem;
+  }
+
+  .photo-card-container {
+    gap: 1rem;
+  }
+
+  .about-portrait {
+    max-width: clamp(100px, 45vw, 160px);
+  }
+
+  /* Reduce particle effects for better performance */
+  canvas#neural {
+    opacity: 0.7;
+  }
+
+  canvas#helix {
+    opacity: 0.6;
+  }
+}
+
+/* Tablet Portrait (768px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .main-header img {
+    max-width: clamp(250px, 35vw, 400px);
+  }
+
+  .coming-soon-card {
+    padding: 2.5rem 2rem;
+  }
+
+  .service-cards-container {
+    gap: 2rem;
+  }
+
+  .service-card {
+    padding: 2rem 1.8rem;
+  }
+
+  .content-wrapper {
+    padding: 0 2rem;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Better touch targets */
+  .service-card {
+    cursor: pointer;
+    -webkit-tap-highlight-color: rgba(0, 229, 255, 0.2);
+  }
+
+  .coming-soon-button {
+    -webkit-tap-highlight-color: rgba(0, 229, 255, 0.3);
+    /* Enhanced touch feedback */
+    transition: all 0.2s ease;
+  }
+
+  /* Touch press effect - scale down with pulse */
+  .coming-soon-button:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(0, 229, 255, 0.4);
+    background: linear-gradient(45deg, #00C4E5, #E500C4);
+    animation: buttonPulse 0.4s ease-out;
+  }
+
+  /* Disable hover effects on touch devices */
+  .service-card:hover {
+    transform: none;
+  }
+
+  .coming-soon-button:hover {
+    transform: none;
+    box-shadow: 0 4px 15px rgba(0, 229, 255, 0.4);
+    background: linear-gradient(45deg, #00E5FF, #FF00D4);
+  }
+
+  /* Prevent text selection on tap */
+  .service-card,
+  .coming-soon-button {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+/* Landscape Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .main-header {
+    padding: 0.5rem 0;
+  }
+
+  .main-header img {
+    max-width: clamp(150px, 30vw, 250px);
+  }
+
+  .coming-soon-card {
+    padding: 1.5rem 2rem;
+    overflow-y: auto;
+    max-height: 100vh;
+  }
+
+  #bgHeaderLogo {
+    width: clamp(150px, 50vw, 300px);
   }
 }
