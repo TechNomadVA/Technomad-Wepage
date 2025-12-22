@@ -18,6 +18,8 @@
     "preview": "vite preview",
     "check-git-env": "node scripts/check-git-env.js",
     "sync-assets": "node scripts/sync-assets.js",
-    "preview:sync": "npm run sync-assets && vite preview"
+    "preview:sync": "npm run sync-assets && vite preview",
+    "deploy": "npm run build && wrangler pages deploy dist",
+    "deploy:preview": "npm run build && wrangler pages deploy dist --project-name=webpage-demo-best"
   }
 }
