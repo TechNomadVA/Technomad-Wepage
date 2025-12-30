@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 
-const Intro = ({ headerRef, isEasterEggActive = false }) => {
+const Intro = ({ headerRef }) => {
   const introRef = useRef(null)
   const summonRef = useRef(null)
   const treeGlowRef = useRef(null)
@@ -61,7 +61,7 @@ const Intro = ({ headerRef, isEasterEggActive = false }) => {
       id="intro" 
       ref={introRef}
       style={{
-        opacity: isEasterEggActive ? 0 : (introRef.current?.style.opacity || 0),
+        opacity: introRef.current?.style.opacity || 0,
         transition: 'opacity 1s ease',
         pointerEvents: 'none'
       }}
