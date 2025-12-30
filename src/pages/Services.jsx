@@ -16,12 +16,12 @@ const Services = () => {
 
   return (
     <>
-      <BackgroundEffects isEasterEggActive={false} />
+      <BackgroundEffects />
       <Suspense fallback={null}>
-        <HelixBackground isEasterEggActive={false} />
+        <HelixBackground />
       </Suspense>
       <Suspense fallback={null}>
-        <NeuralBackground isHovered={false} easterEggActive={false} />
+        <NeuralBackground isHovered={false} />
       </Suspense>
       
       <div className="page-content">

@@ -1971,30 +1971,6 @@ canvas#neural {
     max-width: 100%;
   }
 
-  /* Portal Rim - Mobile Optimized */
-  .portal-rim-container {
-    transform: scale(0.8);
-  }
-
-  .portal-rim-image {
-    max-width: 90vw;
-    max-height: 90vh;
-  }
-
-  .portal-open-vivid {
-    max-width: 60vw;
-    max-height: 60vh;
-  }
-
-  .hero-logo-container {
-    max-width: 70vw;
-    max-height: 70vh;
-  }
-
-  .hero-logo-image {
-    max-width: 100%;
-    max-height: 100%;
-  }
 }
 
 /* Small Mobile Devices (phones in portrait) */
