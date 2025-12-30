@@ -13,9 +13,6 @@ const LoadingSequence = ({ onComplete }) => {
     const criticalAssets = [
       '/header_logo.png',
       '/header_logo_active.png',
-      '/Hero Logo Glow.png',
-      '/Portal rim.png',
-      '/portal open vivid.png',
     ]
 
     const preloadImage = (src) => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 
-const NeuralBackground = ({ isHovered = false, easterEggActive = false }) => {
+const NeuralBackground = ({ isHovered = false }) => {
   const canvasRef = useRef(null)
   const sceneRef = useRef(null)
   const rendererRef = useRef(null)
@@ -13,16 +13,9 @@ const NeuralBackground = ({ isHovered = false, easterEggActive = false }) => {
   const nodeSizesRef = useRef([])
   const hoverRef = useRef(false)
   const fadeProgressRef = useRef(0)
-  const easterEggRef = useRef(false)
   const fadeStartTimeRef = useRef(null)
   const fadeStartProgressRef = useRef(0)
   const fadeTargetProgressRef = useRef(0)
-  const portalGatherProgressRef = useRef(0)
-  const portalGatherStartTimeRef = useRef(null)
-  const portalGatherStartProgressRef = useRef(0)
-  const portalGatherTargetProgressRef = useRef(0)
-  const portalGatherCompleteTimeRef = useRef(null)
-  const particleFadeOutProgressRef = useRef(0)
 
   useEffect(() => {
     if (!canvasRef.current || typeof window === 'undefined') {
@@ -90,18 +83,7 @@ const NeuralBackground = ({ isHovered = false, easterEggActive = false }) => {
       const n = new THREE.Mesh(geo, mat)
       n.userData.baseColor = originalColor.clone() // Store original color
       n.userData.glowColor = glowColors[Math.floor(Math.random() * glowColors.length)].clone() // Random glow color for each particle
-      n.userData.easterEggColor = glowColors[Math.floor(Math.random() * glowColors.length)].clone() // Random easter egg color for each particle
       n.userData.pulsePhase = Math.random() * Math.PI * 2 // Random phase offset for independent pulsing (0 to 2π)
-      
-      // Assign portal fill position - distribute particles throughout the circular area inside portal rim
-      // Use polar coordinates with random radius and angle to fill the circle
-      // Radius reduced by ~0.5 units (approximately 2cm inwards from image edge)
-      const portalInnerRadius = 3.0 // Reduced from 3.5 to move boundary inwards
-      const fillRadius = Math.sqrt(Math.random()) * portalInnerRadius // Square root for uniform distribution in circle
-      const fillAngle = Math.random() * Math.PI * 2 // Random angle
-      n.userData.portalFillX = Math.cos(fillAngle) * fillRadius
-      n.userData.portalFillY = Math.sin(fillAngle) * fillRadius
-      n.userData.portalFillZ = (Math.random() - 0.5) * 0.5 // Fixed Z offset for depth variation
       
       // Spread particles across whole page (but within camera view)
       const spreadX = 16 // Wider spread
@@ -145,51 +127,6 @@ const NeuralBackground = ({ isHovered = false, easterEggActive = false }) => {
       }
     }
 
-    // Update portal gather progress smoothly
-    const updatePortalGatherProgress = () => {
-      if (portalGatherStartTimeRef.current !== null) {
-        const now = Date.now()
-        const elapsed = now - portalGatherStartTimeRef.current
-        const duration = 2000 // 2 seconds for faster gathering
-        const progress = Math.min(1, elapsed / duration)
-        
-        // Apply easing for smoother transition
-        const easedProgress = easeInOutCubic(progress)
-        
-        portalGatherProgressRef.current = portalGatherStartProgressRef.current + 
-          (portalGatherTargetProgressRef.current - portalGatherStartProgressRef.current) * easedProgress
-        
-        if (progress >= 1) {
-          portalGatherProgressRef.current = portalGatherTargetProgressRef.current
-          portalGatherStartTimeRef.current = null
-          
-          // Mark when gathering is complete (for 2 second delay before fade out)
-          if (portalGatherProgressRef.current >= 1.0 && portalGatherCompleteTimeRef.current === null) {
-            portalGatherCompleteTimeRef.current = Date.now()
-          }
-        }
-      }
-      
-      // After 1 second of being fully gathered, start fading out particles (by getting brighter)
-      if (portalGatherCompleteTimeRef.current !== null && easterEggRef.current) {
-        const now = Date.now()
-        const timeSinceComplete = now - portalGatherCompleteTimeRef.current
-        
-        if (timeSinceComplete >= 1000) {
-          // Start fade out after 1 second
-          const fadeOutElapsed = timeSinceComplete - 1000
-          const fadeOutDuration = 1500 // 1.5 seconds to fade out (faster)
-          const fadeOutProgress = Math.min(1, fadeOutElapsed / fadeOutDuration)
-          
-          // Apply easing for smooth fade out
-          const easedFadeOut = easeInOutCubic(fadeOutProgress)
-          particleFadeOutProgressRef.current = easedFadeOut
-        }
-      } else {
-        // Reset fade out progress when not in easter egg mode
-        particleFadeOutProgressRef.current = 0
-      }
-    }
 
     const animateNeural = () => {
       if (!nodesRef.current || !rendererRef.current || !cameraRef.current) {
@@ -198,9 +135,6 @@ const NeuralBackground = ({ isHovered = false, easterEggActive = false }) => {
       
       // Update fade progress smoothly
       updateFadeProgress()
-      
-      // Update portal gather progress smoothly
-      updatePortalGatherProgress()
       
       // Update time for pulsing using actual time for accurate BPM
       if (startTimeRef.current === null) {
@@ -215,10 +149,9 @@ const NeuralBackground = ({ isHovered = false, easterEggActive = false }) => {
       nodesRef.current.rotation.y += baseSpeed
       nodesRef.current.rotation.x += xRotationSpeed
       
-      // Slow smooth continuous pulse effect - 140 BPM when easter egg active, slow pulse normally
+      // Slow smooth continuous pulse effect
       // Using a slow pulse rate (30 BPM = 0.5 beats per second = 2 seconds per beat)
-      // 140 BPM = 140 beats per minute = 140/60 = 2.333 beats per second
-      const pulseBPM = easterEggRef.current ? 140 : 30 // Slow 30 BPM for dormant state
+      const pulseBPM = 30 // Slow 30 BPM for dormant state
       const periodInSeconds = 60 / pulseBPM // Seconds per beat
       
       // Base pulse values (will be modified per particle)
@@ -241,34 +174,18 @@ const NeuralBackground = ({ isHovered = false, easterEggActive = false }) => {
             
             // Smooth continuous transition for particle positions
             const basePos = node.userData.basePosition
-            const portalGatherProgress = portalGatherProgressRef.current
             
-            let currentPosition
+            // Calculate direction from center (0,0,0) to particle's original position
+            const direction = basePos.length() > 0.001 
+              ? basePos.clone().normalize() 
+              : new THREE.Vector3(1, 0, 0) // Fallback direction if at origin
             
-            // When easter egg is active, gather particles to fill the inside area of portal rim
-            if (easterEggRef.current && portalGatherProgress > 0) {
-              // Portal rim inner radius in 3D space is 3.0 units (moved 2cm inwards from image edge)
-              // Use pre-calculated fill positions to distribute particles throughout the circle
-              const fillX = node.userData.portalFillX || 0
-              const fillY = node.userData.portalFillY || 0
-              const fillZ = node.userData.portalFillZ || 0
-              const fillPosition = new THREE.Vector3(fillX, fillY, fillZ)
-              
-              // Interpolate between base position and fill position based on gather progress
-              currentPosition = basePos.clone().lerp(fillPosition, portalGatherProgress)
-            } else {
-              // Normal behavior: Calculate direction from center (0,0,0) to particle's original position
-              const direction = basePos.length() > 0.001 
-                ? basePos.clone().normalize() 
-                : new THREE.Vector3(1, 0, 0) // Fallback direction if at origin
-              
-              // Move particles away when fading out, back when fading in
-              const maxMoveDistance = 15 // Maximum distance to move away
-              const moveDistance = fadeProgress * maxMoveDistance
-              currentPosition = basePos.clone().add(direction.multiplyScalar(moveDistance))
-            }
+            // Move particles away when fading out, back when fading in
+            const maxMoveDistance = 15 // Maximum distance to move away
+            const moveDistance = fadeProgress * maxMoveDistance
+            const currentPosition = basePos.clone().add(direction.multiplyScalar(moveDistance))
             
-            // Update position (vortex effect is already applied to currentPosition above)
+            // Update position
             node.position.copy(currentPosition)
             
             // Scale smoothly: fade out scales down, fade in scales back up
@@ -285,12 +202,6 @@ const NeuralBackground = ({ isHovered = false, easterEggActive = false }) => {
             // Ensure minimum intensity for visibility (glowPulse ranges from 1.2 to 1.6)
             let normalIntensity = Math.max(1.0, glowPulse)
             
-            // Determine normal color based on state
-            if (easterEggRef.current && node.userData.easterEggColor) {
-              normalColor = node.userData.easterEggColor
-            }
-            
-            // No special glow multiplier when gathering - just normal gathering
             
             // When hovered, smoothly transition to glow colors
             if (hoverRef.current && node.userData.glowColor) {
@@ -344,43 +255,8 @@ const NeuralBackground = ({ isHovered = false, easterEggActive = false }) => {
               }
             }
             
-            // Fade out particles by getting brighter, then fading with vortex spin and trails
-            const fadeOutProgress = particleFadeOutProgressRef.current
-            if (fadeOutProgress > 0 && easterEggRef.current) {
-              // First half: get brighter (0 to 0.5 progress)
-              // Second half: fade out with vortex spin (0.5 to 1.0 progress)
-              if (fadeOutProgress < 0.5) {
-                // Getting brighter phase - multiply current color by brightness multiplier
-                const brightenProgress = fadeOutProgress / 0.5 // 0 to 1
-                const brightnessMultiplier = 1.0 + (brightenProgress * 3.0) // 1.0 to 4.0x brightness
-                const currentColor = node.material.color
-                node.material.color.setRGB(
-                  Math.min(1, currentColor.r * brightnessMultiplier),
-                  Math.min(1, currentColor.g * brightnessMultiplier),
-                  Math.min(1, currentColor.b * brightnessMultiplier)
-                )
-                node.material.opacity = 1.0
-              } else {
-                // Fading out phase with blur and trail effects (no vortex)
-                const fadeProgress = (fadeOutProgress - 0.5) / 0.5 // 0 to 1
-                
-                // Keep particles at their fill position (no vortex movement)
-                // currentPosition is already set from the gathering phase
-                
-                // Blur effect - increase size for motion blur appearance
-                const blurSize = 1.0 + (fadeProgress * 1.5) // Particles get larger (blur effect)
-                node.scale.setScalar(scalePulse * fadeScale * blurSize)
-                
-                // Fade out with trail effect (reduced opacity creates trail appearance)
-                node.material.opacity = (1.0 - fadeProgress) * 0.5 // Fade from 0.5 to 0.0 (trail effect)
-              }
-            } else {
-              // Normal opacity
-              node.material.opacity = 1.0
-            }
-            
-            // Update position with vortex effect
-            node.position.copy(currentPosition)
+            // Normal opacity
+            node.material.opacity = 1.0
           }
         })
       }
@@ -409,11 +285,10 @@ const NeuralBackground = ({ isHovered = false, easterEggActive = false }) => {
     }
   }, [])
 
-  // Update hover state and easter egg state
+  // Update hover state
   useEffect(() => {
     hoverRef.current = isHovered
-    easterEggRef.current = easterEggActive
-  }, [isHovered, easterEggActive])
+  }, [isHovered])
 
   // Animate fade progress smoothly using requestAnimationFrame
   useEffect(() => {
@@ -439,19 +314,6 @@ const NeuralBackground = ({ isHovered = false, easterEggActive = false }) => {
     }
   }, [isHovered])
 
-  // Portal gathering effect - gather particles to center when easter egg is active
-  useEffect(() => {
-    const targetProgress = easterEggActive ? 1 : 0
-    portalGatherStartProgressRef.current = portalGatherProgressRef.current
-    portalGatherTargetProgressRef.current = targetProgress
-    portalGatherStartTimeRef.current = Date.now()
-    
-    // Reset completion time when toggling easter egg
-    if (!easterEggActive) {
-      portalGatherCompleteTimeRef.current = null
-      particleFadeOutProgressRef.current = 0
-    }
-  }, [easterEggActive])
 
   return <canvas id="neural" ref={canvasRef}></canvas>
 }
