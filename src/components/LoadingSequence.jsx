@@ -9,30 +9,66 @@ const LoadingSequence = ({ onComplete }) => {
     // Check if loading sequence has been shown before
     const hasSeenLoading = localStorage.getItem('hasSeenLoadingSequence')
     
+    // Critical assets to preload
+    const criticalAssets = [
+      '/header_logo.png',
+      '/header_logo_active.png',
+      '/Hero Logo Glow.png',
+      '/Portal rim.png',
+      '/portal open vivid.png',
+    ]
+
+    const preloadImage = (src) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image()
+        img.onload = () => resolve(src)
+        img.onerror = () => resolve(src) // Continue even if image fails
+        img.src = src
+      })
+    }
+
+    const preloadAssets = async () => {
+      // Preload critical images
+      await Promise.all(criticalAssets.map(preloadImage))
+    }
+
     if (!hasSeenLoading) {
-      // Simulate loading progress
+      // Preload assets and update progress
+      let currentProgress = 0
+      const targetProgress = 100
+      const progressInterval = 50 // Update every 50ms
+      const progressStep = 1.5 // Increase by 1.5% each time
+      
+      // Start preloading
+      preloadAssets().then(() => {
+        // Assets loaded, ensure progress reaches 100%
+        currentProgress = Math.max(currentProgress, 95)
+        setProgress(95)
+      })
+
       const interval = setInterval(() => {
-        setProgress((prev) => {
-          const newProgress = prev + 2
-          if (newProgress >= 100) {
-            clearInterval(interval)
-            // Start fade out
+        currentProgress = Math.min(currentProgress + progressStep, targetProgress)
+        setProgress(currentProgress)
+        
+        if (currentProgress >= targetProgress) {
+          clearInterval(interval)
+          // Small delay to ensure assets are ready
+          setTimeout(() => {
             setFadeOut(true)
-            // Mark as seen and hide after animation
             setTimeout(() => {
               localStorage.setItem('hasSeenLoadingSequence', 'true')
               setShowLoading(false)
               if (onComplete) onComplete()
             }, 500)
-            return 100
-          }
-          return newProgress
-        })
-      }, 30)
+          }, 200)
+        }
+      }, progressInterval)
 
       return () => clearInterval(interval)
     } else {
-      // Already seen, hide immediately
+      // Already seen, but still preload assets in background
+      preloadAssets()
+      // Hide immediately
       setShowLoading(false)
       if (onComplete) onComplete()
     }
@@ -51,7 +87,11 @@ const LoadingSequence = ({ onComplete }) => {
     >
       <div className="loading-content">
         <div className="loading-logo">
-          <img src="/header_logo.png" alt="TechNomad" />
+          <img 
+            src="/header_logo.png" 
+            alt="TechNomad" 
+            decoding="sync"
+          />
         </div>
         <div className="loading-progress-bar">
           <div className="loading-progress-fill" style={{ width: `${progress}%` }}></div>

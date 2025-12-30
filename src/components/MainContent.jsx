@@ -21,9 +21,11 @@ const MainContent = () => {
               className="about-portrait"
               src="/thomas_frame_trans.svg"
               alt="TechNomad founder portrait"
+              loading="lazy"
+              decoding="async"
             />
             <p className="photo-description">
-              Digital operations, creative production, systems architecture and conscious workflow design. Everything built to support founders, creatives, and teams with clarity and intention.
+              Digital operations, creative production, systems architecture and conscious workflow design. Everything built to support creatives and teams with clarity and intention.
             </p>
           </div>
           <div ref={signupRef}>

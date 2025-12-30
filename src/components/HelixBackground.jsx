@@ -5,7 +5,9 @@ const HelixBackground = ({ isEasterEggActive = false }) => {
   const helixAngleRef = useRef(0)
   const animationFrameRef = useRef(null)
   const wavesRef = useRef([])
+  const ripplesRef = useRef([])
   const lastWaveTimeRef = useRef(0)
+  const lastRippleTimeRef = useRef(0)
   const timeRef = useRef(0)
 
   useEffect(() => {
@@ -21,9 +23,11 @@ const HelixBackground = ({ isEasterEggActive = false }) => {
     }
     resizeHelixCanvas()
 
-    // Initialize wave system
+    // Initialize wave and ripple systems
     wavesRef.current = []
+    ripplesRef.current = []
     lastWaveTimeRef.current = Date.now()
+    lastRippleTimeRef.current = Date.now()
     timeRef.current = 0
 
     // Reduce complexity on mobile devices for better performance
@@ -46,6 +50,20 @@ const HelixBackground = ({ isEasterEggActive = false }) => {
       }
     }
 
+    // Ripple system for expanding circular effects
+    const createRipple = (x, y, spiralIndex) => {
+      return {
+        x: x,
+        y: y,
+        spiralIndex: spiralIndex,
+        radius: 0,
+        maxRadius: 80 + Math.random() * 60, // Ripple expands to 80-140px
+        intensity: 0.8 + Math.random() * 0.2,
+        age: 0,
+        speed: 2 + Math.random() * 1.5 // Expansion speed
+      }
+    }
+
     const animateHelix = () => {
       if (canvas.width === 0 || canvas.height === 0) {
         animationFrameRef.current = requestAnimationFrame(animateHelix)
@@ -65,19 +83,49 @@ const HelixBackground = ({ isEasterEggActive = false }) => {
       const speed = 0.018
       helixAngleRef.current -= speed
 
-      // Randomly spawn new waves (every 2-5 seconds on average)
+      // Randomly spawn new waves (every 1.5-4 seconds on average - more frequent)
       const now = Date.now()
-      if (now - lastWaveTimeRef.current > (2000 + Math.random() * 3000)) {
-        wavesRef.current.push(createWave())
+      if (now - lastWaveTimeRef.current > (1500 + Math.random() * 2500)) {
+        const newWave = createWave()
+        wavesRef.current.push(newWave)
         lastWaveTimeRef.current = now
+        
+        // Create ripple effect at wave start position
+        const rippleX = 0 * spacing
+        const rippleY = centerY + Math.sin(0 * 0.22 + helixAngleRef.current + (newWave.spiralIndex * Math.PI * 2 / 3)) * amplitude
+        ripplesRef.current.push(createRipple(rippleX, rippleY, newWave.spiralIndex))
       }
 
       // Update and remove expired waves
       wavesRef.current = wavesRef.current.filter(wave => {
         wave.position += wave.speed
         wave.age += 0.016
+        
+        // Create additional ripples as wave progresses (every 10-15 particles)
+        if (Math.floor(wave.position) % 12 === 0 && Math.random() > 0.7) {
+          const rippleX = wave.position * spacing
+          const rippleY = centerY + Math.sin(wave.position * 0.22 + helixAngleRef.current + (wave.spiralIndex * Math.PI * 2 / 3)) * amplitude
+          ripplesRef.current.push(createRipple(rippleX, rippleY, wave.spiralIndex))
+        }
+        
         return wave.position < numPoints + wave.width // Remove when past the end
       })
+
+      // Update and remove expired ripples
+      ripplesRef.current = ripplesRef.current.filter(ripple => {
+        ripple.radius += ripple.speed
+        ripple.age += 0.016
+        return ripple.radius < ripple.maxRadius // Remove when fully expanded
+      })
+
+      // Spawn random ripples occasionally (every 3-6 seconds)
+      if (now - lastRippleTimeRef.current > (3000 + Math.random() * 3000)) {
+        const randomSpiral = Math.floor(Math.random() * 3)
+        const randomX = Math.random() * canvas.width
+        const randomY = centerY + (Math.random() - 0.5) * amplitude * 2
+        ripplesRef.current.push(createRipple(randomX, randomY, randomSpiral))
+        lastRippleTimeRef.current = now
+      }
 
       // Base properties (no pulsing or hover effects)
       const baseGlowIntensity = 20
@@ -123,24 +171,75 @@ const HelixBackground = ({ isEasterEggActive = false }) => {
         ]
 
         for (const particle of particles) {
-          // Calculate wave-enhanced properties
-          const waveMultiplier = 1 + particle.waveEffect * 1.5 // Size increases up to 2.5x
+          // Calculate wave-enhanced properties with enhanced ripple effects
+          const waveMultiplier = 1 + particle.waveEffect * 2.0 // Size increases up to 3x (more pronounced)
           const currentSize = particleSize * waveMultiplier
-          const currentGlow = baseGlowIntensity * (1 + particle.waveEffect * 2) // Glow increases up to 3x
-          const currentAlpha = Math.min(1, baseAlpha * (1 + particle.waveEffect * 0.8)) // Alpha increases
+          const currentGlow = baseGlowIntensity * (1 + particle.waveEffect * 3) // Glow increases up to 4x
+          const currentAlpha = Math.min(1, baseAlpha * (1 + particle.waveEffect * 1.2)) // Alpha increases more
+
+          // Calculate ripple effects on this particle
+          let rippleEffect = 0
+          for (const ripple of ripplesRef.current) {
+            const dx = x - ripple.x
+            const dy = particle.y - ripple.y
+            const distance = Math.sqrt(dx * dx + dy * dy)
+            const rippleDistance = Math.abs(distance - ripple.radius)
+            
+            // Ripple affects particles near the ripple ring
+            if (rippleDistance < 15) {
+              const normalizedDistance = rippleDistance / 15
+              const rippleIntensity = (1 - normalizedDistance) * ripple.intensity
+              const falloff = Math.cos(normalizedDistance * Math.PI / 2)
+              rippleEffect = Math.max(rippleEffect, falloff * rippleIntensity * 0.6)
+            }
+          }
+
+          // Combine wave and ripple effects
+          const combinedEffect = Math.max(particle.waveEffect, rippleEffect)
+          const finalSize = currentSize * (1 + rippleEffect * 0.5)
+          const finalGlow = currentGlow * (1 + rippleEffect * 0.8)
+          const finalAlpha = Math.min(1, currentAlpha * (1 + rippleEffect * 0.4))
 
           ctx.save()
-          ctx.globalAlpha = currentAlpha
-          ctx.shadowBlur = currentGlow
+          ctx.globalAlpha = finalAlpha
+          ctx.shadowBlur = finalGlow
           ctx.shadowColor = particle.shadowColor
           
           ctx.beginPath()
-          ctx.arc(x, particle.y, currentSize, 0, Math.PI * 2)
+          ctx.arc(x, particle.y, finalSize, 0, Math.PI * 2)
           ctx.fillStyle = particle.color
           ctx.fill()
           
           ctx.restore()
         }
+      }
+
+      // Draw ripple rings
+      for (const ripple of ripplesRef.current) {
+        const spiralColors = ['#00E5FF', '#FF00D4', '#008CFF']
+        const rippleColor = spiralColors[ripple.spiralIndex]
+        const rippleAlpha = (1 - ripple.radius / ripple.maxRadius) * ripple.intensity * 0.4
+        
+        ctx.save()
+        ctx.globalAlpha = rippleAlpha
+        ctx.strokeStyle = rippleColor
+        ctx.lineWidth = 2
+        ctx.shadowBlur = 15
+        ctx.shadowColor = rippleColor
+        
+        ctx.beginPath()
+        ctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2)
+        ctx.stroke()
+        
+        // Draw secondary inner ring for more depth
+        if (ripple.radius > 10) {
+          ctx.globalAlpha = rippleAlpha * 0.5
+          ctx.beginPath()
+          ctx.arc(ripple.x, ripple.y, ripple.radius - 5, 0, Math.PI * 2)
+          ctx.stroke()
+        }
+        
+        ctx.restore()
       }
 
       animationFrameRef.current = requestAnimationFrame(animateHelix)

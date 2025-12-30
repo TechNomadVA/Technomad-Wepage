@@ -26,6 +26,15 @@ export default defineConfig({
     sourcemap: false,
     // Target modern browsers for smaller bundles
     target: 'esnext',
+    // Enable CSS code splitting
+    cssCodeSplit: true,
+    // Optimize asset inlining threshold (smaller files inline as base64)
+    assetsInlineLimit: 4096, // 4kb
+  },
+  // Optimize dependencies
+  optimizeDeps: {
+    include: ['react', 'react-dom'],
+    exclude: ['three'], // Let Three.js load on demand
   },
 })
 

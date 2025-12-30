@@ -81,6 +81,8 @@ const PortalRim = ({ isEasterEggActive = false }) => {
         src="/portal open vivid.png"
         alt="Portal open"
         className={showPortalOpen ? 'portal-open-breathing' : ''}
+        loading="lazy"
+        decoding="async"
         style={{
           position: 'absolute',
           width: '95%',
@@ -114,6 +116,8 @@ const PortalRim = ({ isEasterEggActive = false }) => {
           src="/Hero Logo Glow.png"
           alt="Hero Logo"
           className={showHeroLogo ? 'hero-logo-summon hero-logo-magical' : ''}
+          loading="lazy"
+          decoding="async"
           style={{
             width: '100%',
             height: '100%',
@@ -130,6 +134,8 @@ const PortalRim = ({ isEasterEggActive = false }) => {
           src="/Hero Logo Glow.png"
           alt="Hero Logo Glow Overlay"
           className={showHeroLogo ? 'hero-logo-glow-overlay' : ''}
+          loading="lazy"
+          decoding="async"
           style={{
             width: '100%',
             height: '100%',
@@ -156,6 +162,8 @@ const PortalRim = ({ isEasterEggActive = false }) => {
         src="/Portal rim.png"
         alt="Portal rim"
         className={startRipple ? (rimActivated ? 'portal-rim-ripple portal-rim-activated' : 'portal-rim-ripple') : ''}
+        loading="lazy"
+        decoding="async"
         style={{
           position: 'relative',
           width: '100%',
