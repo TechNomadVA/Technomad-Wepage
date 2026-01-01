@@ -27,3 +27,7 @@ yarn-error.log*
 *.swp
 *.swo
 
+# Embedded git repositories (causing submodule issues)
+Technomad-Landing/
+Webpage-Demo-best/
+
