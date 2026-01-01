@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 
-const HelixBackground = ({ isEasterEggActive = false }) => {
+const HelixBackground = () => {
   const canvasRef = useRef(null)
   const helixAngleRef = useRef(0)
   const animationFrameRef = useRef(null)
@@ -264,11 +264,6 @@ const HelixBackground = ({ isEasterEggActive = false }) => {
     <canvas 
       id="helix" 
       ref={canvasRef}
-      style={{
-        opacity: isEasterEggActive ? 0 : 1,
-        transition: 'opacity 1s ease',
-        pointerEvents: isEasterEggActive ? 'none' : 'auto'
-      }}
     ></canvas>
   )
 }

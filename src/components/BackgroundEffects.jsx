@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 
-const BackgroundEffects = ({ isEasterEggActive = false }) => {
+const BackgroundEffects = () => {
   const mandalaRef = useRef(null)
   const canvasRef = useRef(null)
   const angleRef = useRef(0)
@@ -105,21 +105,15 @@ const BackgroundEffects = ({ isEasterEggActive = false }) => {
     }
   }, [])
 
-  const fadeStyle = {
-    opacity: isEasterEggActive ? 0 : 1,
-    transition: 'opacity 1s ease',
-    pointerEvents: isEasterEggActive ? 'none' : 'auto'
-  }
-
   return (
     <>
       {/* Mandala background - behind everything */}
-      <div id="mandala" ref={mandalaRef} style={fadeStyle}></div>
+      <div id="mandala" ref={mandalaRef}></div>
       {/* Color glow overlays - alternating fade effect */}
-      <div id="cyanGlow" className="color-glow-overlay" style={fadeStyle}></div>
-      <div id="magentaGlow" className="color-glow-overlay" style={fadeStyle}></div>
+      <div id="cyanGlow" className="color-glow-overlay"></div>
+      <div id="magentaGlow" className="color-glow-overlay"></div>
       {/* Helix particle spiral - on top of mandala */}
-      <canvas id="helix" ref={canvasRef} style={{ zIndex: 1, position: 'fixed', ...fadeStyle }}></canvas>
+      <canvas id="helix" ref={canvasRef} style={{ zIndex: 1, position: 'fixed' }}></canvas>
     </>
   )
 }

@@ -12,7 +12,6 @@ function AppContent() {
   const headerRef = useRef(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isButtonHovered, setIsButtonHovered] = useState(false)
-  const [isEasterEggActive, setIsEasterEggActive] = useState(false)
   const [isComingSoonCardVisible, setIsComingSoonCardVisible] = useState(true)
   const location = useLocation()
 
@@ -20,32 +19,15 @@ function AppContent() {
     setIsLoading(false)
   }
 
-  const handleTEasterEggClick = () => {
-    setIsEasterEggActive(prev => !prev) // Toggle easter egg
-  }
-
-  const isHomePage = location.pathname === '/'
-  const showEasterEgg = isEasterEggActive && isHomePage
-
   return (
     <>
       <NetworkStatus />
       <LoadingSequence onComplete={handleLoadingComplete} />
       {!isLoading && (
-        <div
-          style={{
-            opacity: showEasterEgg ? 0.1 : 1,
-            transition: 'opacity 1s ease',
-            pointerEvents: 'auto'
-          }}
-        >
-          <Header 
-            ref={headerRef} 
-            onTEasterEggClick={handleTEasterEggClick} 
-            isEasterEggActive={showEasterEgg}
-            isComingSoonCardVisible={isComingSoonCardVisible}
-          />
-          </div>
+        <Header 
+          ref={headerRef} 
+          isComingSoonCardVisible={isComingSoonCardVisible}
+        />
       )}
       <Routes>
         <Route 
@@ -56,8 +38,6 @@ function AppContent() {
               isLoading={isLoading}
               isButtonHovered={isButtonHovered}
               setIsButtonHovered={setIsButtonHovered}
-              isEasterEggActive={isEasterEggActive}
-              handleTEasterEggClick={handleTEasterEggClick}
               isComingSoonCardVisible={isComingSoonCardVisible}
               setIsComingSoonCardVisible={setIsComingSoonCardVisible}
             />

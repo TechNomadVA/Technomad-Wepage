@@ -3,7 +3,6 @@ import Intro from '../components/Intro'
 import BackgroundEffects from '../components/BackgroundEffects'
 import MainContent from '../components/MainContent'
 import Footer from '../components/Footer'
-import PortalRim from '../components/PortalRim'
 import { Suspense, lazy } from 'react'
 
 // Lazy load heavy Three.js components for better initial load performance
@@ -15,32 +14,22 @@ const Home = ({
   isLoading, 
   isButtonHovered, 
   setIsButtonHovered,
-  isEasterEggActive, 
-  handleTEasterEggClick,
   isComingSoonCardVisible,
   setIsComingSoonCardVisible
 }) => {
   return (
     <>
-      <Intro headerRef={headerRef} isEasterEggActive={isEasterEggActive} />
-      <BackgroundEffects isEasterEggActive={isEasterEggActive} />
+      <Intro headerRef={headerRef} />
+      <BackgroundEffects />
       {/* Lazy load heavy background components with Suspense */}
       <Suspense fallback={null}>
-        <HelixBackground isEasterEggActive={isEasterEggActive} />
+        <HelixBackground />
       </Suspense>
       <Suspense fallback={null}>
-        <NeuralBackground isHovered={isButtonHovered} easterEggActive={isEasterEggActive} />
+        <NeuralBackground isHovered={isButtonHovered} />
       </Suspense>
-      <PortalRim isEasterEggActive={isEasterEggActive} />
       {isComingSoonCardVisible && (
-        <div 
-          className="coming-soon-card"
-          style={{
-            opacity: isEasterEggActive ? 0 : 1,
-            transition: 'opacity 1s ease',
-            pointerEvents: isEasterEggActive ? 'none' : 'auto'
-          }}
-        >
+        <div className="coming-soon-card">
           <p className="coming-soon-subtitle">TechNomad is almost live.</p>
           <p className="coming-soon-description">
             Digital operations, brand clarity, and web systems.
@@ -63,16 +52,8 @@ const Home = ({
           </button>
         </div>
       )}
-      <div
-        style={{
-          opacity: isEasterEggActive ? 0 : 1,
-          transition: 'opacity 1s ease',
-          pointerEvents: isEasterEggActive ? 'none' : 'auto'
-        }}
-      >
-        <MainContent />
-        <Footer />
-      </div>
+      <MainContent />
+      <Footer />
     </>
   )
 }
