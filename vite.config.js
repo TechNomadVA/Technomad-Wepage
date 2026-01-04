@@ -11,7 +11,7 @@ export default defineConfig({
         // Manual chunk splitting for better optimization
         manualChunks: {
           // Separate React and ReactDOM into their own chunk
-          'react-vendor': ['react', 'react-dom'],
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           // Separate Three.js into its own chunk (it's large)
           'three-vendor': ['three'],
         },
@@ -33,7 +33,7 @@ export default defineConfig({
   },
   // Optimize dependencies
   optimizeDeps: {
-    include: ['react', 'react-dom'],
+    include: ['react', 'react-dom', 'react-router-dom'],
     exclude: ['three'], // Let Three.js load on demand
   },
 })
