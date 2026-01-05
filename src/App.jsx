@@ -1,5 +1,5 @@
-import React, { useRef, useState, Suspense } from 'react'
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
+import React, { useRef, useState } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import LoadingSequence from './components/LoadingSequence'
 import NetworkStatus from './components/NetworkStatus'
 import Header from './components/Header'
@@ -7,13 +7,13 @@ import Home from './pages/Home'
 import Services from './pages/Services'
 import Portfolio from './pages/Portfolio'
 import Contact from './pages/Contact'
+import Admin from './pages/Admin'
 
 function AppContent() {
   const headerRef = useRef(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isButtonHovered, setIsButtonHovered] = useState(false)
   const [isComingSoonCardVisible, setIsComingSoonCardVisible] = useState(true)
-  const location = useLocation()
 
   const handleLoadingComplete = () => {
     setIsLoading(false)
@@ -46,6 +46,7 @@ function AppContent() {
         <Route path="/services" element={<Services />} />
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </>
   )

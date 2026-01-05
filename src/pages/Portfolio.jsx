@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { Suspense, lazy } from 'react'
 import BackgroundEffects from '../components/BackgroundEffects'
 import Footer from '../components/Footer'
-import { Suspense, lazy } from 'react'
 
 // Lazy load heavy Three.js components
 const NeuralBackground = lazy(() => import('../components/NeuralBackground'))
