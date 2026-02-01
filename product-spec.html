@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TechNomad Virtual System - Product Specification</title>
+    <meta
+      name="description"
+      content="Developer-ready specification for the TechNomad Virtual System, a minimal voice-first personal operating system with clerk-only AI."
+    >
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="container header-content">
+        <div class="brand">
+          <a class="logo" href="index.html">TechNomad</a>
+          <p class="tagline">Digital structure for wandering minds.</p>
+          <p class="location">Manchester-rooted, expanding throughout the network.</p>
+        </div>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="index.html">Home</a>
+          <a href="product-spec.html" aria-current="page">Product specification</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="page-hero">
+        <div class="container">
+          <p class="kicker">Product specification (cross-platform)</p>
+          <h1>TechNomad Virtual System</h1>
+          <p class="lead">
+            A complete, developer-ready specification for a minimal, boringly reliable personal
+            operating system that reduces cognitive load through voice-first, factual task capture
+            and recall. The AI behaves strictly as a clerk (transcribe, read back, summarise,
+            remind) - no invention or speculation.
+          </p>
+          <dl class="meta-list">
+            <div>
+              <dt>Document purpose</dt>
+              <dd>
+                A complete, developer-ready specification for a minimal, boringly reliable personal
+                operating system that reduces cognitive load through voice-first, factual task
+                capture and recall.
+              </dd>
+            </div>
+            <div>
+              <dt>Source</dt>
+              <dd>
+                This specification formalises the working plan in TECHNOMAD VIRTUAL SYSTEM v1.
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <nav class="toc" aria-label="On this page">
+            <h2>On this page</h2>
+            <ol>
+              <li><a href="#executive-summary">1) Executive Summary</a></li>
+              <li><a href="#goals-non-goals">2) Goals &amp; Non-Goals</a></li>
+              <li><a href="#users-success-metrics">3) Users &amp; Success Metrics</a></li>
+              <li><a href="#product-scope">4) Product Scope (V1)</a></li>
+              <li><a href="#platform-architecture">5) Platform &amp; Architecture</a></li>
+              <li><a href="#functional-requirements">6) Functional Requirements</a></li>
+              <li><a href="#non-functional-requirements">7) Non-Functional Requirements</a></li>
+              <li><a href="#data-model">8) Data Model (Local-First)</a></li>
+              <li><a href="#api-integrations">9) API &amp; Integrations (V1)</a></li>
+              <li><a href="#ux-specification">10) UX Specification</a></li>
+              <li><a href="#acceptance-criteria">11) Acceptance Criteria (Samples)</a></li>
+              <li><a href="#telemetry-logging">12) Telemetry &amp; Logging (Opt-In)</a></li>
+              <li><a href="#risks-mitigations">13) Risks &amp; Mitigations</a></li>
+              <li><a href="#security-privacy">14) Security, Privacy, Compliance</a></li>
+              <li><a href="#testing-strategy">15) Testing Strategy</a></li>
+              <li><a href="#release-plan">16) Release Plan (Milestones)</a></li>
+              <li><a href="#definition-done">17) Definition of Done (V1)</a></li>
+              <li><a href="#appendices">18) Appendices</a></li>
+              <li><a href="#build-checklist">Build Checklist (Developer-Runbook)</a></li>
+            </ol>
+          </nav>
+        </div>
+      </section>
+
+      <section id="executive-summary" class="section">
+        <div class="container">
+          <h2>1) Executive Summary</h2>
+          <p>
+            Technomad is a single-user, voice-first cross-platform app that opens to a zero-friction
+            dashboard showing only date, time, weekday, and a short status line (e.g., &quot;You have 3
+            tasks today&quot;). No feeds, no dopamine traps. Core is a plain-text task system with
+            optional notes and a binary status (To-do / Done). AI is constrained to clerical
+            operations to avoid hallucinations and cognitive overload. Success is proven when the
+            system is used by its owner for 14 consecutive days.
+          </p>
+        </div>
+      </section>
+
+      <section id="goals-non-goals" class="section">
+        <div class="container">
+          <h2>2) Goals &amp; Non-Goals</h2>
+          <h3>2.1 Goals</h3>
+          <ul>
+            <li>
+              Reduce cognitive load; compensate for dyslexia, memory gaps, and time-blindness via
+              predictable, low-stimulus workflows.
+            </li>
+            <li>Voice-first capture with dependable transcription and immediate read-back.</li>
+            <li>Boring reliability over features; minimal scope, maximal stability.</li>
+            <li>
+              Four clerical AI functions only: transcribe, read back, summarise existing text,
+              remind.
+            </li>
+            <li>Proof, not polish: measurable success = &quot;I used my own system for 14 days.&quot;</li>
+          </ul>
+
+          <h3>2.2 Non-Goals (V1)</h3>
+          <ul>
+            <li>No priorities, tags, labels, colours, boards, gamification, or social features.</li>
+            <li>
+              No creative generation, ideation, extrapolation, or coaching by AI. The AI is not a
+              friend; it is a clerk.
+            </li>
+            <li>No multi-user collaboration, shared workspaces, or admin panels.</li>
+            <li>No complex calendar integrations (beyond a simple &quot;today count&quot; derived from tasks).</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="users-success-metrics" class="section">
+        <div class="container">
+          <h2>3) Users &amp; Success Metrics</h2>
+          <h3>3.1 Primary User</h3>
+          <p>
+            A solo user who needs reliable, predictable, factual assistance; values low cognitive
+            friction; experiences dyslexia/time-blindness/memory gaps; prefers voice over typing.
+          </p>
+
+          <h3>3.2 Success Metrics (V1)</h3>
+          <ul>
+            <li>Adoption: App launched on &gt;= 12 of 14 consecutive days.</li>
+            <li>Completion: &gt;= 1 task marked &quot;Done&quot; on &gt;= 10 of 14 days.</li>
+            <li>
+              Friction: Average capture-to-task latency (start speaking -&gt; task saved) &lt;= 7 seconds.
+            </li>
+            <li>Stability: Zero data loss incidents; crash rate &lt; 0.5% of sessions.</li>
+            <li>
+              Qualitative: User self-report: &quot;My brain feels calmer while working.&quot; (weekly
+              check-in)
+            </li>
+          </ul>
+          <p>
+            The headline proof metric originates from your plan: &quot;I used my own system for 14
+            days.&quot;
+          </p>
+        </div>
+      </section>
+
+      <section id="product-scope" class="section">
+        <div class="container">
+          <h2>4) Product Scope (V1)</h2>
+          <h3>4.1 Dashboard (Login Landing)</h3>
+          <ul>
+            <li>
+              Elements: Date, Time, Day of week, Status line (&quot;You have N tasks today&quot; / &quot;No tasks
+              logged&quot; / &quot;Last activity: HH:mm yesterday&quot;).
+            </li>
+            <li>No notifications feed, badges, or external content.</li>
+          </ul>
+
+          <h3>4.2 Tasks</h3>
+          <ul>
+            <li>Fields: title (required), note (optional), status in {todo, done}. Nothing else.</li>
+            <li>Storage: Plain text representation with durable persistence.</li>
+            <li>
+              Views:
+              <ul>
+                <li>
+                  Today (default): count + list of incomplete tasks created or due &quot;today&quot; (simple
+                  date field; no recurring logic in V1).
+                </li>
+                <li>All: reverse-chronological by created date.</li>
+              </ul>
+            </li>
+            <li>Actions: Add (voice/text), Mark done/undo, Edit title/note, Delete.</li>
+          </ul>
+
+          <h3>4.3 Voice &amp; AI (Clerk-Only)</h3>
+          <ul>
+            <li>
+              Allowed behaviours: Transcribe voice to text; Read back tasks; Summarise existing
+              notes into shorter bullet points on request; Schedule simple reminders (local device
+              notifications only).
+            </li>
+            <li>
+              Prohibited: Guessing, inventing, extrapolating, therapy, or &quot;friend&quot; persona. If
+              unsure -&gt; &quot;I don't know.&quot;
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="platform-architecture" class="section">
+        <div class="container">
+          <h2>5) Platform &amp; Architecture</h2>
+          <h3>5.1 Cross-Platform Choice</h3>
+          <p>
+            <strong>Primary framework:</strong> Flutter (single codebase -&gt; iOS, Android, macOS,
+            Windows, Linux, Web). Rationale: mature multi-platform targets, strong accessibility
+            support, excellent performance, offline-first patterns, consistent UI fidelity, robust
+            plugin ecosystem (mic access, local DB, TTS).
+          </p>
+          <p>
+            <strong>Alternative (if needed later):</strong> React Native (mobile) + Electron/Tauri
+            (desktop). Not used in V1 to avoid multi-repo complexity.
+          </p>
+
+          <h3>5.2 High-Level Architecture</h3>
+          <pre class="diagram" aria-label="High-level architecture diagram">
+[ UI (Flutter) ]
+     |
+[ Application Layer ]
+     |-- Command handlers (AddTask, MarkDone, ReadBack, SummariseNote)
+     |-- Policy guards (AI Clerk Rules)
+     |
+[ Data Layer ]
+     |-- Local DB (SQLite via Drift)  &lt;-- source of truth
+     |-- Optional Sync Adapter (phase-gated; disabled by default)
+     |
+[ Device Services ]
+     |-- Microphone, TTS, Local Notifications
+     |
+[ AI Services ]
+     |-- STT: Azure Speech-to-Text (online)
+     |-- TTS: Azure Speech (online) or on-device TTS where available
+     |-- Summarisation: Azure OpenAI (GPT-4o-mini or equivalent), "summarise only"
+          </pre>
+          <p>
+            Local-first by default; syncing can be added later as a separate phase. This matches
+            your &quot;stick to walk with&quot; principle.
+          </p>
+        </div>
+      </section>
+
+      <section id="functional-requirements" class="section">
+        <div class="container">
+          <h2>6) Functional Requirements</h2>
+          <h3>6.1 Authentication &amp; Session</h3>
+          <ul>
+            <li>Single user: email + password or passkey (platform native).</li>
+            <li>Stay signed in until explicit logout.</li>
+            <li>No social login in V1.</li>
+          </ul>
+
+          <h3>6.2 Dashboard</h3>
+          <ul>
+            <li>Show Date / Time / Weekday / Status line on launch.</li>
+            <li>
+              Status line rules:
+              <ul>
+                <li>If any todo with createdOn == today: &quot;You have N tasks today.&quot;</li>
+                <li>Else if no tasks exist: &quot;No tasks logged.&quot;</li>
+                <li>Else: &quot;Last activity: {relative time}.&quot;</li>
+              </ul>
+            </li>
+          </ul>
+          <p class="note">These strings reflect your plan for the MVP dashboard.</p>
+
+          <h3>6.3 Task Management</h3>
+          <ul>
+            <li>
+              <strong>Create (voice):</strong> Press/hold mic -&gt; capture audio -&gt; transcribe -&gt;
+              preview text -&gt; confirm to save.
+            </li>
+            <li><strong>Create (text):</strong> Text field + Save.</li>
+            <li><strong>Edit:</strong> Title and note.</li>
+            <li><strong>Status:</strong> Toggle todo/done.</li>
+            <li><strong>Delete:</strong> Hard delete (local DB).</li>
+            <li><strong>Read Back:</strong> Select tasks -&gt; device reads aloud via TTS.</li>
+            <li>
+              <strong>Summarise note:</strong> On a task's note, optional &quot;Summarise&quot; produces a
+              shorter version without adding new ideas.
+            </li>
+          </ul>
+
+          <h3>6.4 Reminders (Local-Only)</h3>
+          <ul>
+            <li>Optional per task: time-based local notification.</li>
+            <li>No recurrence or snooze storms (V1). Keep it calm.</li>
+          </ul>
+
+          <h3>6.5 AI Behaviour (Enforced Rules)</h3>
+          <ul>
+            <li>If confidence &lt; threshold or missing context -&gt; reply &quot;I don't know.&quot;</li>
+            <li>Disallow prompts that request ideation, opinions, or creative writing.</li>
+            <li>Summaries must be extractive or constrained abstractive of existing text only.</li>
+            <li>The assistant refers to itself only as a clerk; no social language.</li>
+          </ul>
+          <p class="note">
+            These constraints codify the rules you set: &quot;not creative... does not invent... reflects,
+            records, reminds, and organises.&quot;
+          </p>
+        </div>
+      </section>
+
+      <section id="non-functional-requirements" class="section">
+        <div class="container">
+          <h2>7) Non-Functional Requirements</h2>
+          <ul>
+            <li><strong>Reliability:</strong> 99.5% crash-free sessions; no silent data loss.</li>
+            <li>
+              <strong>Performance:</strong>
+              <ul>
+                <li>Cold start -&gt; dashboard ready &lt;= 2.5 s on mid-tier Android.</li>
+                <li>Voice capture to task saved &lt;= 7 s median on 10 Mbps connection.</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Security:</strong>
+              <ul>
+                <li>All network calls over TLS 1.2+.</li>
+                <li>Local DB encrypted at rest (SQLCipher via Drift).</li>
+                <li>API keys stored securely (platform keystore/keychain).</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Privacy:</strong>
+              <ul>
+                <li>No analytics PII; opt-in diagnostics only.</li>
+                <li>
+                  Audio sent to cloud STT only for transcription; not stored server-side (provider
+                  setting).
+                </li>
+              </ul>
+            </li>
+            <li>
+              <strong>Accessibility:</strong>
+              <ul>
+                <li>Full screen-reader labels; minimum 4.5:1 contrast; scalable text; large tap targets.</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Internationalisation:</strong> English (en-GB) first; string externalisation.
+            </li>
+            <li>
+              <strong>Offline:</strong> Full read/write to local DB; queued sync (if enabled later).
+            </li>
+            <li>
+              <strong>Calm Design:</strong> No red badges, no animated distractions, no social proof
+              patterns.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="data-model" class="section">
+        <div class="container">
+          <h2>8) Data Model (Local-First)</h2>
+          <h3>8.1 Entities</h3>
+          <div class="table-group">
+            <table>
+              <caption>User</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Field</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>userId</td>
+                  <td>uuid</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>email</td>
+                  <td>string</td>
+                  <td>unique</td>
+                </tr>
+                <tr>
+                  <td>createdAt</td>
+                  <td>datetime</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table>
+              <caption>Task</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Field</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>taskId</td>
+                  <td>uuid</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>title</td>
+                  <td>string</td>
+                  <td>required, 1-200 chars</td>
+                </tr>
+                <tr>
+                  <td>note</td>
+                  <td>string</td>
+                  <td>optional, &lt;= 2000 chars</td>
+                </tr>
+                <tr>
+                  <td>status</td>
+                  <td>enum</td>
+                  <td>todo | done, default todo</td>
+                </tr>
+                <tr>
+                  <td>createdAt</td>
+                  <td>datetime</td>
+                  <td>default now</td>
+                </tr>
+                <tr>
+                  <td>completedAt</td>
+                  <td>datetime</td>
+                  <td>nullable</td>
+                </tr>
+                <tr>
+                  <td>remindAt</td>
+                  <td>datetime</td>
+                  <td>nullable</td>
+                </tr>
+                <tr>
+                  <td>source</td>
+                  <td>enum</td>
+                  <td>voice | text</td>
+                </tr>
+                <tr>
+                  <td>deviceId</td>
+                  <td>string</td>
+                  <td>optional</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>8.2 Derived Views</h3>
+          <ul>
+            <li>Today Count: status == 'todo' &amp;&amp; createdAt in local_today.</li>
+            <li>Last Activity: max of createdAt or completedAt.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="api-integrations" class="section">
+        <div class="container">
+          <h2>9) API &amp; Integrations (V1)</h2>
+          <p>
+            Architecture stance: Operate fully local by default. Integrations are thin and clerical.
+          </p>
+
+          <h3>9.1 Speech-to-Text (STT)</h3>
+          <ul>
+            <li>Provider: Azure Cognitive Services - Speech to Text.</li>
+            <li>Usage: Short utterances (&lt;= 30s).</li>
+            <li>Output: transcript text + confidence score.</li>
+            <li>Policy: Do not store audio server-side; discard after transcription.</li>
+          </ul>
+
+          <h3>9.2 Text-to-Speech (TTS)</h3>
+          <ul>
+            <li>Provider: Azure Speech.</li>
+            <li>Voices: Natural, low-emotion voice; consistent rate/pitch.</li>
+          </ul>
+
+          <h3>9.3 Summarisation (Extractive/Constrained)</h3>
+          <ul>
+            <li>Provider: Azure OpenAI (GPT-4o-mini or comparable).</li>
+            <li>System prompt (fixed):</li>
+          </ul>
+          <pre><code>ROLE: Clerk.
+You only summarise existing user text into shorter, clearer phrasing.
+Never invent, guess, or add new information.
+If inputs are insufficient, reply: "I don't know."</code></pre>
+          <p>
+            (Encodes your AI-as-Clerk doctrine.)
+          </p>
+        </div>
+      </section>
+
+      <section id="ux-specification" class="section">
+        <div class="container">
+          <h2>10) UX Specification</h2>
+          <h3>10.1 Visual Style</h3>
+          <ul>
+            <li>Monochrome + one accent (accessible contrast).</li>
+            <li>Generous line spacing, large type (min 16sp), high legibility.</li>
+            <li>Single primary button per view (keep choices obvious).</li>
+          </ul>
+
+          <h3>10.2 Key Screens</h3>
+          <h4>Dashboard</h4>
+          <ul>
+            <li>Top: large Date / Time / Weekday.</li>
+            <li>Centre: Status line.</li>
+            <li>Bottom: Mic button (hold-to-capture) + &quot;Add text task&quot;.</li>
+          </ul>
+
+          <h4>Task List (Today)</h4>
+          <ul>
+            <li>Simple list with checkboxes; tap to toggle done; long-press to read back.</li>
+            <li>FAB: &quot;Add task&quot;.</li>
+          </ul>
+
+          <h4>Task Detail</h4>
+          <ul>
+            <li>Title, note, status toggle, optional reminder time.</li>
+            <li>Button: &quot;Summarise note&quot; (AI).</li>
+          </ul>
+
+          <h4>Settings</h4>
+          <ul>
+            <li>Voice speed/volume; Accessibility font size; Opt-in diagnostics; Data export (.json).</li>
+          </ul>
+
+          <h3>10.3 Voice Capture Flow</h3>
+          <ol>
+            <li>Hold mic -&gt; waveform animates -&gt; release to stop.</li>
+            <li>Show transcript preview -&gt; Confirm -&gt; Task saved -&gt; Snackbar: &quot;Saved&quot;.</li>
+            <li>On low confidence: show &quot;I'm not sure I heard that - try again?&quot;</li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="acceptance-criteria" class="section">
+        <div class="container">
+          <h2>11) Acceptance Criteria (Samples)</h2>
+          <ul>
+            <li>
+              Dashboard shows date/time/weekday and status line exactly as spec'd; no other dynamic
+              elements.
+            </li>
+            <li>Create task (voice): From press to &quot;Saved&quot; &lt;= 7 s median under 10 Mbps.</li>
+            <li>AI: Any prompt that asks for ideation produces &quot;I don't know.&quot;</li>
+            <li>
+              Summarise: Output contains only concepts present in input; 0% hallucinated entities in
+              test suite.
+            </li>
+            <li>Data safety: Force-quit during save does not corrupt DB (verified via property tests).</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="telemetry-logging" class="section">
+        <div class="container">
+          <h2>12) Telemetry &amp; Logging (Opt-In)</h2>
+          <ul>
+            <li>Anonymous: session start/stop, crashes, latency buckets (STT end-to-save).</li>
+            <li>Never capture content of tasks or transcripts.</li>
+            <li>Error logs: local ring buffer; user may export for support.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="risks-mitigations" class="section">
+        <div class="container">
+          <h2>13) Risks &amp; Mitigations</h2>
+          <ul>
+            <li>
+              STT accuracy variability -&gt; Provide quick &quot;edit before save&quot;; store original transcript
+              for 5 minutes locally to allow undo; fallback to text entry.
+            </li>
+            <li>
+              Cognitive overload creep -&gt; Governance check before adding any field/feature; &quot;No
+              tags/priorities&quot; policy locked in tests.
+            </li>
+            <li>Scope drift -&gt; Milestone gate: ship after V1 features only; anything else -&gt; backlog.</li>
+            <li>
+              Cloud dependency -&gt; Offline read/write default; summaries optional; STT can defer to
+              manual entry if offline.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="security-privacy" class="section">
+        <div class="container">
+          <h2>14) Security, Privacy, Compliance</h2>
+          <ul>
+            <li>Encryption: At rest (SQLCipher), in transit (TLS 1.2+).</li>
+            <li>Secrets: Platform secure storage (Keychain/Keystore).</li>
+            <li>Data retention: All data resides locally; optional encrypted cloud backup (Phase 2).</li>
+            <li>User control: Export all data to JSON; delete all data (local wipe).</li>
+            <li>Privacy by design: No third-party analytics by default.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="testing-strategy" class="section">
+        <div class="container">
+          <h2>15) Testing Strategy</h2>
+          <ul>
+            <li>Unit tests: Data model, command handlers, AI policy guards.</li>
+            <li>Integration tests: Voice flow; save/edit/delete; reminder fire.</li>
+            <li>Property tests: DB integrity during interruption.</li>
+            <li>Accessibility tests: Screen reader, colour contrast, focus order.</li>
+            <li>
+              Manual scripts: &quot;14-Day Proof&quot; script (daily launch, add &gt;= 1 task, mark &gt;= 1 done).
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="release-plan" class="section">
+        <div class="container">
+          <h2>16) Release Plan (Milestones)</h2>
+          <ul>
+            <li>M0 - Foundations: Project scaffold, local DB, clean dashboard shell.</li>
+            <li>M1 - Tasks (Text): Create/edit/toggle/delete; Today view; Status line.</li>
+            <li>M2 - Voice: Mic capture -&gt; STT -&gt; save flow; read-back via TTS.</li>
+            <li>M3 - AI Summarise (optional): Constrained summaries for notes.</li>
+            <li>M4 - Reminders: Local notifications.</li>
+            <li>M5 - Stability &amp; Proof: Fix bugs, run the 14-day proof.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="definition-done" class="section">
+        <div class="container">
+          <h2>17) Definition of Done (V1)</h2>
+          <ul>
+            <li>Meets all acceptance criteria; passes stability thresholds.</li>
+            <li>Used &gt;= 12 of 14 days with &gt;= 10 task completions.</li>
+            <li>No data loss incidents; crash-free sessions &gt;= 99.5%.</li>
+            <li>The AI never produces invented content across the test suite.</li>
+            <li>App bundle signed and deployable to TestFlight/Internal testing tracks plus desktop installers.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="appendices" class="section">
+        <div class="container">
+          <h2>18) Appendices</h2>
+          <h3>A) AI Policy Contract (Embed verbatim)</h3>
+          <blockquote class="policy">
+            <p>&quot;This system is not creative.</p>
+            <p>It does not invent.</p>
+            <p>It reflects, records, reminds, and organises.&quot;</p>
+            <p>If it doesn't know, it says &quot;I don't know.&quot;</p>
+            <p>Allowed: Transcribe, Read back, Summarise existing text, Remind.</p>
+            <p>Forbidden: Guessing, extrapolating, inventing, therapy, or social persona.</p>
+          </blockquote>
+
+          <h3>B) Out-of-Scope (Hold the line)</h3>
+          <ul>
+            <li>Tags, priorities, categories, labels, colours.</li>
+            <li>Complex scheduling/recurrence, calendar sync, email integration.</li>
+            <li>Collaboration, accounts/teams, sharing.</li>
+            <li>Any AI beyond the clerk role.</li>
+          </ul>
+
+          <h3>C) Data Export Format (JSON)</h3>
+          <pre><code>{
+  "version": "1.0",
+  "exportedAt": "ISO-8601 timestamp",
+  "user": {
+    "userId": "uuid",
+    "email": "string"
+  },
+  "tasks": [
+    {
+      "taskId": "uuid",
+      "title": "string",
+      "note": "string|null",
+      "status": "todo|done",
+      "createdAt": "ISO-8601",
+      "completedAt": "ISO-8601|null",
+      "remindAt": "ISO-8601|null",
+      "source": "voice|text",
+      "deviceId": "string|null"
+    }
+  ]
+}</code></pre>
+        </div>
+      </section>
+
+      <section id="build-checklist" class="section">
+        <div class="container">
+          <h2>Build Checklist (Developer-Runbook)</h2>
+          <h3>Foundations</h3>
+          <ul>
+            <li>Create Flutter app; enable iOS/Android/Web/Desktop targets.</li>
+            <li>Add Drift (SQLite) + SQLCipher; define schema.</li>
+            <li>Implement secure storage for secrets.</li>
+          </ul>
+
+          <h3>Dashboard</h3>
+          <ul>
+            <li>Render Date/Time/Weekday; implement Status line rules.</li>
+            <li>No feeds/notifications beyond local reminders.</li>
+          </ul>
+
+          <h3>Tasks</h3>
+          <ul>
+            <li>Text create/edit/delete/toggle.</li>
+            <li>Today &amp; All views.</li>
+            <li>Data export (.json).</li>
+          </ul>
+
+          <h3>Voice &amp; AI</h3>
+          <ul>
+            <li>Mic capture -&gt; Azure STT -&gt; transcript preview -&gt; save.</li>
+            <li>Read back via TTS.</li>
+            <li>Summarise button on note (Azure OpenAI) with Clerk system prompt.</li>
+          </ul>
+
+          <h3>Reminders</h3>
+          <ul>
+            <li>Local notification scheduling.</li>
+            <li>Respect quiet hours; no repetitive nags.</li>
+          </ul>
+
+          <h3>Policy Guards</h3>
+          <ul>
+            <li>Block ideation/creative prompts.</li>
+            <li>&quot;I don't know&quot; on low confidence or missing context.</li>
+            <li>Unit tests asserting no hallucination paths.</li>
+          </ul>
+
+          <h3>Quality Gates</h3>
+          <ul>
+            <li>Crash-free &gt;= 99.5%.</li>
+            <li>Voice-to-save &lt;= 7s median.</li>
+            <li>14-day proof completed (script logged).</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-content">
+        <div>
+          <p class="footer-brand">TechNomad</p>
+          <p class="tagline">Digital structure for wandering minds.</p>
+          <p class="location">Manchester-rooted, expanding throughout the network.</p>
+        </div>
+        <nav class="site-nav" aria-label="Footer">
+          <a href="index.html">Home</a>
+          <a href="product-spec.html">Product specification</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>
